@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Access</title>
 
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <style>
 body{
     margin:0;
@@ -25,14 +29,14 @@ body{
 
 /* CARD */
 .card{
-    width:86%;
-    max-width:350px;
+    width:88%;
+    max-width:360px;
     margin:0 auto;
     background:#fff;
     border-radius:22px;
     padding-bottom:26px;
     color:#000;
-    overflow:hidden;
+    position:relative;
 }
 
 /* HEADER */
@@ -40,31 +44,36 @@ body{
     position:relative;
     background:#ffb703;
     color:#fff;
-    padding:14px 12px;
-    font-size:15px;
+    padding:16px;
+    font-size:16px;
+    border-radius:22px 22px 0 0;
 }
 
-/* KHUYẾT THẬT */
-.card-header::before,
-.card-header::after{
+/* KHUYẾT TRÁI */
+.card-header::before{
     content:"";
     position:absolute;
-    bottom:-18px;
-    width:36px;
-    height:36px;
-    background:#2f3347;
+    bottom:-14px;
+    left:36px;
+    width:28px;
+    height:28px;
+    background:#fff;
     border-radius:50%;
 }
 
-.card-header::before{
-    left:-18px;
-}
-
+/* KHUYẾT PHẢI */
 .card-header::after{
-    right:-18px;
+    content:"";
+    position:absolute;
+    bottom:-14px;
+    right:36px;
+    width:28px;
+    height:28px;
+    background:#fff;
+    border-radius:50%;
 }
 
-/* NGÀY GIỜ */
+/* DATE */
 .datetime{
     margin:28px 0 16px;
     font-size:21px;
@@ -75,7 +84,7 @@ body{
 /* QR */
 .qr{
     margin:6px auto;
-    width:250px;
+    width:260px;
     position:relative;
 }
 
@@ -92,7 +101,7 @@ body{
     width:32px;
     height:32px;
     margin:-16px;
-    border:3px solid rgba(0,0,0,.2);
+    border:3px solid rgba(0,0,0,.25);
     border-top-color:#ffb703;
     border-radius:50%;
     animation:spin .8s linear infinite;
@@ -106,26 +115,26 @@ body{
 /* REFRESH */
 .refresh{
     margin-top:10px;
-    color:#888;
     font-size:14px;
+    color:#888;
     cursor:pointer;
 }
 
 /* TIMER */
 .timer{
     margin-top:8px;
-    font-size:25px;
+    font-size:26px;
     font-weight:bold;
     color:#2ecc71;
 }
 
-/* NOTE */
+/* NOTE – 3 DÒNG */
 .note{
-    margin:26px auto;
+    margin:28px auto;
     max-width:320px;
     font-size:14px;
     color:#bfc3d9;
-    line-height:1.9;
+    line-height:1.8;
 }
 </style>
 </head>
@@ -193,12 +202,7 @@ function renderTimer(){
 // CLICK 3 LẦN
 let clickCount=0;
 let step=0;
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
+const steps=[9000,18000,28800,0];
 
 function handleNameClick(){
     clickCount++;
@@ -210,18 +214,18 @@ function handleNameClick(){
     }
 }
 
-// QR LOAD
+// QR LOAD – MỜ + LOADING
 function refreshQR(){
     const img=document.getElementById("qrImage");
-    const loading=document.getElementById("qrLoading");
+    const load=document.getElementById("qrLoading");
 
     img.style.opacity="0.35";
-    loading.style.display="block";
+    load.style.display="block";
 
     setTimeout(()=>{
         img.src="qr.png?t="+Date.now();
         img.style.opacity="1";
-        loading.style.display="none";
+        load.style.display="none";
     },600);
 }
 </script>
