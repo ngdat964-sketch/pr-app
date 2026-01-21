@@ -5,6 +5,7 @@
 
 <meta name="viewport"
       content="width=device-width,
+               height=device-height,
                initial-scale=1.0,
                maximum-scale=1.0,
                user-scalable=no">
@@ -12,37 +13,45 @@
 <title>NV6</title>
 
 <style>
-html, body {
+* {
     margin: 0;
     padding: 0;
+}
+
+html, body {
     width: 100%;
     height: 100%;
     overflow: hidden;
     background: black;
-    touch-action: none;      /* chặn zoom */
+    touch-action: none; /* chặn zoom web */
 }
 
+/* Ảnh luôn PHỦ KÍN màn hình */
 img {
-    width: 100vw;
-    height: 100vh;
-    object-fit: contain;     /* không zoom, không cắt */
-    user-select: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* PHỦ HẾT MÀN HÌNH */
+    display: block;
 }
 </style>
 
 <script>
-/* Nhận biết APP WebView */
+/* Nhận diện APP WebView (chính xác hơn) */
 function isApp() {
-    return /wv|android|iphone|ipad/i.test(navigator.userAgent);
+    return (
+        /wv/i.test(navigator.userAgent) ||
+        /Android/i.test(navigator.userAgent) ||
+        /iPhone|iPad/i.test(navigator.userAgent)
+    );
 }
 
 window.onload = function () {
     const img = document.getElementById("view");
 
     if (isApp()) {
-        img.src = "app.jpg";   // ảnh cho APP
+        img.src = "app.jpg";  // ẢNH APP
     } else {
-        img.src = "web.jpg";   // ảnh cho WEB
+        img.src = "web.jpg";  // ẢNH WEB
     }
 };
 </script>
