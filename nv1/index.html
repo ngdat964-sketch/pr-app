@@ -20,7 +20,7 @@ body{
 
 /* TÊN + MÃ NV */
 .name{
-    margin:24px 0 14px;
+    margin:28px 0 18px;
     font-size:22px;
     font-weight:bold;
     color:#f0d58c;
@@ -29,69 +29,93 @@ body{
 
 /* CARD */
 .card{
-    width:90%;
-    max-width:360px;
+    width:92%;
+    max-width:380px;
     margin:0 auto;
     background:#fff;
-    border-radius:20px;
-    padding-bottom:24px;
+    border-radius:22px;
+    padding-bottom:28px;
     color:#000;
-    overflow:hidden;
 }
 
-/* HEADER VÀNG — KHÓT ĐÚNG NHƯ ẢNH THẬT */
+/* HEADER VÀNG + KHUYẾT 2 BÊN */
 .card-header{
     position:relative;
-    background:
-        radial-gradient(
-            circle 14px at 26px 100%,
-            transparent 98%,
-            #ffb703 100%
-        ),
-        radial-gradient(
-            circle 14px at calc(100% - 26px) 100%,
-            transparent 98%,
-            #ffb703 100%
-        ),
-        #ffb703;
+    background:#ffb703;
     color:#fff;
-    padding:14px;
+    padding:16px;
     font-size:16px;
-    border-radius:20px 20px 0 0;
+    border-radius:22px 22px 0 0;
 }
 
-/* NGÀY GIỜ */
+/* KHUYẾT TRÁI */
+.card-header::before{
+    content:"";
+    position:absolute;
+    bottom:-14px;
+    left:42px;
+    width:28px;
+    height:28px;
+    background:#fff;
+    border-radius:50%;
+}
+
+/* KHUYẾT PHẢI */
+.card-header::after{
+    content:"";
+    position:absolute;
+    bottom:-14px;
+    right:42px;
+    width:28px;
+    height:28px;
+    background:#fff;
+    border-radius:50%;
+}
+
+/* NGÀY + GIỜ */
 .datetime{
-    margin:18px 0 10px;
-    font-size:20px;
+    margin:30px 0 18px;
+    font-size:22px;
     font-weight:bold;
     white-space:nowrap;
 }
 
 /* QR */
 .qr{
-    margin:10px auto;
-    width:260px;
-}
-.qr img{
-    width:100%;
-    transition:transform .4s ease, opacity .3s ease;
+    margin:8px auto;
+    width:280px;
+    position:relative;
 }
 
-/* HIỆU ỨNG LOADING */
-.loading{
-    animation:spin .6s linear;
+.qr img{
+    width:100%;
+    transition:opacity .3s ease;
 }
+
+/* LOADING */
+.qr-loading{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:34px;
+    height:34px;
+    margin:-17px;
+    border:3px solid rgba(0,0,0,.2);
+    border-top-color:#ffb703;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    display:none;
+}
+
 @keyframes spin{
-    from{transform:rotate(0deg) scale(.9);}
-    to{transform:rotate(360deg) scale(1);}
+    to{transform:rotate(360deg);}
 }
 
 /* REFRESH */
 .refresh{
     margin-top:10px;
+    color:#888;
     font-size:14px;
-    color:#999;
     cursor:pointer;
 }
 
@@ -103,12 +127,13 @@ body{
     color:#2ecc71;
 }
 
-/* NOTE */
+/* NOTE – 3 DÒNG */
 .note{
-    margin:30px 20px;
+    margin:30px auto;
+    max-width:330px;
     font-size:14px;
     color:#bfc3d9;
-    line-height:1.6;
+    line-height:1.9;
 }
 </style>
 </head>
@@ -129,6 +154,7 @@ V25101874 (Nguyễn Đức Anh)
 
     <div class="qr">
         <img id="qrImage" src="qr.png">
+        <div class="qr-loading" id="qrLoading"></div>
     </div>
 
     <div class="refresh" onclick="refreshQR()">刷新二维码</div>
@@ -138,7 +164,9 @@ V25101874 (Nguyễn Đức Anh)
 </div>
 
 <div class="note">
-尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
+尊敬的员工您好，您已进入企业涉密区域，<br>
+出于企业安全考虑，您的手机摄像头将被禁止拍摄，<br>
+感谢您的配合。
 </div>
 
 <script>
@@ -170,11 +198,11 @@ function renderTimer(){
         String(seconds%60).padStart(2,"0");
 }
 
-// ===== CLICK 3 LẦN ĐỔI THỜI GIAN =====
+// ===== CLICK 3 LẦN =====
 let clickCount=0;
 let step=0;
 const steps=[
-    2*3600+30*60, // 2h30
+    2*3600+30*60,
     5*3600,
     8*3600,
     0
@@ -190,17 +218,19 @@ function handleNameClick(){
     }
 }
 
-// ===== REFRESH QR + HIỆU ỨNG =====
+// ===== QR LOAD ĐÚNG YÊU CẦU =====
 function refreshQR(){
     const img=document.getElementById("qrImage");
-    img.classList.add("loading");
-    img.style.opacity="0";
+    const loading=document.getElementById("qrLoading");
+
+    img.style.opacity="0.35";
+    loading.style.display="block";
 
     setTimeout(()=>{
         img.src="qr.png?t="+Date.now();
         img.style.opacity="1";
-        img.classList.remove("loading");
-    },300);
+        loading.style.display="none";
+    },600);
 }
 </script>
 
