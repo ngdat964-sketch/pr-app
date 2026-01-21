@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,39 +9,41 @@
 body{
     margin:0;
     background:#2f3347;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+    font-family:Arial,sans-serif;
+    text-align:center;
     color:#fff;
 }
 
-/* ===== HEADER ===== */
-.header{
-    padding:16px 12px 10px;
-    text-align:center;
-    font-size:22px;
-    font-weight:600;
-    color:#f2d28b;
+/* TÊN */
+.name{
+    margin:24px 0 14px;
+    font-size:21px;
+    font-weight:bold;
+    color:#f0d58c;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .card{
-    width:90%;
-    max-width:360px;
+    width:80%;
+    max-width:320px;
     margin:0 auto;
+    background:#fff;
+    border-radius:22px;
+    padding-bottom:24px;
+    color:#000;
+    overflow:hidden;
 }
 
-/* ===== YELLOW BAR ===== */
+/* HEADER */
 .card-header{
     position:relative;
-    background:#f5b400;
+    background:#ffb703;
     color:#fff;
-    text-align:center;
-    padding:14px 10px;
-    border-radius:16px 16px 0 0;
-    font-size:15px;
-    line-height:1.3;
+    padding:13px 12px;
+    font-size:14px;
 }
 
-/* khuyết trái + phải (bé & vuông nhẹ) */
+/* KHUYẾT – BÉ GẤP ĐÔI */
 .card-header::before,
 .card-header::after{
     content:"";
@@ -50,175 +52,177 @@ body{
     width:14px;
     height:14px;
     background:#2f3347;
-    border-radius:4px;
+    border-radius:50%;
 }
 
-.card-header::before{ left:14px; }
-.card-header::after{ right:14px; }
+.card-header::before{ left:-7px; }
+.card-header::after{ right:-7px; }
 
-/* ===== CHỮ TRUNG 3 DÒNG ===== */
-.note span{ display:block; }
-.note .line2{ margin-top:2px; }
-.note .line3{
-    margin-top:-10px;   /* sát dòng 2 */
-    line-height:1.2;
-}
-
-/* ===== WHITE BOX ===== */
-.card-body{
-    background:#fff;
-    color:#000;
-    border-radius:0 0 20px 20px;
-    padding:16px 12px 20px;
-    text-align:center;
-}
-
-/* ===== TIME ===== */
+/* DATE */
 .datetime{
-    font-size:22px;
-    font-weight:700;
-    margin-bottom:10px;
+    margin:24px 0 14px;
+    font-size:20px;
+    font-weight:bold;
+    white-space:nowrap;
 }
 
-/* ===== QR ===== */
+/* QR */
 .qr{
-    position:relative;
+    margin:6px auto;
     width:230px;
-    height:230px;
-    margin:0 auto;
+    position:relative;
 }
 
 .qr img{
     width:100%;
-    height:100%;
-    transition:transform .6s ease, filter .6s ease;
+    transition:opacity .3s ease;
 }
 
-/* loading – chỉ mờ + scale */
-.qr.loading img{
-    filter:blur(2px);
-    transform:scale(0.96);
-}
-
+/* LOADING */
 .qr-loading{
     position:absolute;
-    inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-}
-
-.qr.loading .qr-loading{
-    display:flex;
-}
-
-.qr-loading::after{
-    content:"";
-    width:34px;
-    height:34px;
-    border:3px solid #ddd;
-    border-top-color:#4caf50;
+    top:50%;
+    left:50%;
+    width:30px;
+    height:30px;
+    margin:-15px;
+    border:3px solid rgba(0,0,0,.25);
+    border-top-color:#ffb703;
     border-radius:50%;
-    animation:spin 1s linear infinite;
+    animation:spin .8s linear infinite;
+    display:none;
 }
 
 @keyframes spin{
-    to{ transform:rotate(360deg); }
+    to{transform:rotate(360deg);}
 }
 
-/* ===== TEXT ===== */
+/* REFRESH */
 .refresh{
     margin-top:10px;
-    color:#999;
+    color:#888;
     font-size:14px;
 }
 
+/* TIMER */
 .timer{
-    margin-top:6px;
-    font-size:28px;
-    font-weight:700;
-    color:#3ac569;
+    margin-top:8px;
+    font-size:24px;
+    font-weight:bold;
+    color:#2ecc71;
 }
 
-/* ===== FOOTER NOTE ===== */
-.footer{
-    width:90%;
-    max-width:360px;
-    margin:18px auto 0;
-    text-align:center;
-    font-size:15px;
-    color:#cfd3e0;
-    line-height:1.7;
+/* NOTE */
+.note{
+    margin:24px auto;
+    max-width:300px;
+    font-size:14px;
+    color:#bfc3d9;
+    line-height:1.85;
+}
+
+/* 👉 CHỈ SỬA DÒNG THỨ 3 – KÉO SÁT LÊN */
+.note .line3{
+    display:block;
+    margin-top:-10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    Nguyễn Đức Anh (V25101874)
+<div class="name">
+Nguyễn Đức Anh (V25101874)
 </div>
 
 <div class="card">
 
     <div class="card-header">
-        <div class="note">
-            <span>将二维码对准扫描器</span>
-            <span class="line2">刷新出场</span>
-            <span class="line3">请保持稳定</span>
-        </div>
+        将二维码对准扫描器刷新出场
     </div>
 
-    <div class="card-body">
-        <div class="datetime" id="datetime"></div>
+    <div class="datetime" id="datetime"></div>
 
-        <div class="qr" id="qrBox">
-            <img id="qrImage" src="qr.png">
-            <div class="qr-loading"></div>
-        </div>
-
-        <div class="refresh">刷新二维码</div>
-        <div class="timer" id="timer">00:00:30</div>
+    <div class="qr">
+        <img id="qrImage" src="qr.png">
+        <div class="qr-loading" id="qrLoading"></div>
     </div>
+
+    <div class="refresh" onclick="refreshQR()">刷新二维码</div>
+
+    <div class="timer" id="timer">00:00:00</div>
+
 </div>
 
-<div class="footer">
-    尊敬的员工您好，您已进入企业涉密区域，<br>
-    出于企业安全考虑，您的手机摄像头将被禁止拍摄，<br>
-    感谢您的配合。
+<div class="note">
+尊敬的员工您好，您已进入企业涉密区域，<br>
+出于企业安全考虑，您的手机摄像头将被禁止，<br>
+<span class="line3">感谢您的配合。</span>
 </div>
 
 <script>
-/* ===== DATETIME ===== */
-function updateTime(){
-    const d=new Date();
-    const pad=n=>String(n).padStart(2,'0');
-    document.getElementById('datetime').innerText=
-        d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+
-        pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());
+// DATE TIME
+function updateDateTime(){
+    const n=new Date();
+    document.getElementById("datetime").innerText=
+        n.getFullYear()+"-"+
+        String(n.getMonth()+1).padStart(2,"0")+"-"+
+        String(n.getDate()).padStart(2,"0")+" "+
+        String(n.getHours()).padStart(2,"0")+":"+
+        String(n.getMinutes()).padStart(2,"0")+":"+
+        String(n.getSeconds()).padStart(2,"0");
 }
-setInterval(updateTime,1000);
-updateTime();
+setInterval(updateDateTime,1000);
+updateDateTime();
 
-/* ===== TIMER ===== */
-let time=30;
+// TIMER
+let seconds=0;
 setInterval(()=>{
-    time--;
-    if(time<=0) time=30;
-    const m=String(Math.floor(time/60)).padStart(2,'0');
-    const s=String(time%60).padStart(2,'0');
-    document.getElementById('timer').innerText=`00:${m}:${s}`;
+    seconds++;
+    renderTimer();
 },1000);
 
-/* ===== QR LOADING EFFECT ===== */
-function refreshQR(){
-    const box=document.getElementById('qrBox');
-    box.classList.add('loading');
-    setTimeout(()=>{
-        box.classList.remove('loading');
-    },1200);
+function renderTimer(){
+    document.getElementById("timer").innerText=
+        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
+        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
+        String(seconds%60).padStart(2,"0");
 }
-setInterval(refreshQR,5000);
+
+// CLICK 3 LẦN
+let clickCount=0;
+let step=0;
+const steps=[
+    2*3600+30*60,
+    5*3600,
+    8*3600,
+    0
+];
+
+document.querySelector(".name").onclick=()=>{
+    clickCount++;
+    if(clickCount===3){
+        seconds=steps[step];
+        renderTimer();
+        step=(step+1)%steps.length;
+        clickCount=0;
+    }
+};
+
+// QR LOAD
+function refreshQR(){
+    const img=document.getElementById("qrImage");
+    const loading=document.getElementById("qrLoading");
+
+    img.style.opacity="0.4";
+    loading.style.display="block";
+
+    setTimeout(()=>{
+        img.src="qr.png?t="+Date.now();
+        img.style.opacity="1";
+        loading.style.display="none";
+    },600);
+}
 </script>
 
 </body>
