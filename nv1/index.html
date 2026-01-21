@@ -13,104 +13,116 @@
 body{
     margin:0;
     background:#2f3347;
-    font-family:Arial,sans-serif;
-    text-align:center;
+    font-family:Arial,Helvetica,sans-serif;
     color:#fff;
+    text-align:center;
 }
 
-/* TÊN + MÃ NV */
+/* ===== TÊN ===== */
 .name{
-    margin:25px 0 15px;
+    margin:22px 0 14px;
     font-size:22px;
     font-weight:bold;
     color:#f0d58c;
-    cursor:pointer;
 }
 
-/* CARD */
+/* ===== CARD ===== */
 .card{
     width:90%;
     max-width:360px;
     margin:0 auto;
     background:#fff;
-    border-radius:20px;
-    padding-bottom:25px;
-    color:#000;
+    border-radius:22px;
     overflow:hidden;
+    color:#000;
 }
 
-/* THANH VÀNG + KHUYẾT */
+/* ===== HEADER VÀNG + NGÓC KHUYẾT ===== */
 .card-header{
-    background:#ffb703;
-    color:#fff;
-    padding:14px;
-    font-size:16px;
     position:relative;
+    background:#ffb703;
+    padding:14px 10px 18px;
+    font-size:16px;
+    color:#fff;
 }
 
 .card-header::after{
     content:"";
     position:absolute;
-    bottom:-12px;
     left:50%;
+    bottom:-14px;
     transform:translateX(-50%);
-    width:60px;
-    height:24px;
-    background:#fff;
-    border-radius:0 0 30px 30px;
+    width:56px;
+    height:28px;
+    background:#ffb703;
+    border-radius:0 0 28px 28px;
 }
 
-/* DATETIME 1 DÒNG */
+/* ===== NỘI DUNG ===== */
+.content{
+    padding:26px 16px 20px;
+}
+
+/* DATE TIME */
 .datetime{
-    margin:20px 0 10px;
     font-size:20px;
     font-weight:bold;
-    white-space:nowrap;
+    margin-bottom:12px;
 }
 
 /* QR */
-.qr{
-    margin:10px auto;
-    width:260px;
+.qr-wrap{
     position:relative;
+    width:260px;
+    margin:0 auto;
 }
 
-.qr img{
+.qr-wrap img{
     width:100%;
     transition:opacity .25s ease, transform .25s ease;
 }
 
-/* LOADING XOAY */
+/* LOADING */
 .loading{
     position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    width:60px;
-    height:60px;
-    border:5px solid #ddd;
-    border-top:5px solid #ffb703;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(255,255,255,.7);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s;
+}
+
+.loading.active{
+    opacity:1;
+}
+
+.spinner{
+    width:40px;
+    height:40px;
+    border:4px solid #ddd;
+    border-top-color:#ffb703;
     border-radius:50%;
-    animation:spin .8s linear infinite;
-    display:none;
+    animation:spin 0.8s linear infinite;
 }
 
 @keyframes spin{
-    from{transform:translate(-50%,-50%) rotate(0)}
-    to{transform:translate(-50%,-50%) rotate(360deg)}
+    to{transform:rotate(360deg);}
 }
 
 /* REFRESH */
 .refresh{
     margin-top:10px;
-    color:#999;
     font-size:14px;
+    color:#888;
     cursor:pointer;
 }
 
 /* TIMER */
 .timer{
-    margin-top:8px;
+    margin-top:6px;
     font-size:26px;
     font-weight:bold;
     color:#2ecc71;
@@ -118,17 +130,17 @@ body{
 
 /* NOTE */
 .note{
-    margin:30px 20px;
+    margin:26px 18px;
     font-size:14px;
-    color:#bfc3d9;
     line-height:1.6;
+    color:#bfc3d9;
 }
 </style>
 </head>
 
 <body>
 
-<div class="name" onclick="handleNameClick()">
+<div class="name">
 V25101874 (Nguyễn Đức Anh)
 </div>
 
@@ -138,18 +150,24 @@ V25101874 (Nguyễn Đức Anh)
         将二维码对准扫描器刷新出场
     </div>
 
-    <div class="datetime" id="datetime"></div>
+    <div class="content">
 
-    <div class="qr">
-        <div class="loading" id="loading"></div>
-        <img id="qrImage" src="qr.png">
+        <div class="datetime" id="datetime"></div>
+
+        <div class="qr-wrap">
+            <img id="qrImage" src="qr.png">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+            </div>
+        </div>
+
+        <div class="refresh" onclick="refreshQR()">
+            刷新二维码
+        </div>
+
+        <div class="timer" id="timer">00:00:00</div>
+
     </div>
-
-    <div class="refresh" onclick="refreshQR()">
-        刷新二维码
-    </div>
-
-    <div class="timer" id="timer">00:00:00</div>
 </div>
 
 <div class="note">
@@ -157,61 +175,44 @@ V25101874 (Nguyễn Đức Anh)
 </div>
 
 <script>
-// DATETIME
+/* ===== DATE TIME ===== */
 function updateDateTime(){
-    const n=new Date();
-    document.getElementById("datetime").innerText=
-        n.getFullYear()+"-"+
-        String(n.getMonth()+1).padStart(2,"0")+"-"+
-        String(n.getDate()).padStart(2,"0")+" "+
-        String(n.getHours()).padStart(2,"0")+":"+
-        String(n.getMinutes()).padStart(2,"0")+":"+
-        String(n.getSeconds()).padStart(2,"0");
+    const d=new Date();
+    const t=d.getFullYear()+"-"+
+        String(d.getMonth()+1).padStart(2,"0")+"-"+
+        String(d.getDate()).padStart(2,"0")+" "+
+        String(d.getHours()).padStart(2,"0")+":"+
+        String(d.getMinutes()).padStart(2,"0")+":"+
+        String(d.getSeconds()).padStart(2,"0");
+    document.getElementById("datetime").innerText=t;
 }
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER
-let seconds=0;
+/* ===== TIMER ===== */
+let sec=0;
 setInterval(()=>{
-    seconds++;
-    renderTimer();
+    sec++;
+    document.getElementById("timer").innerText=
+        String(Math.floor(sec/3600)).padStart(2,"0")+":"+
+        String(Math.floor((sec%3600)/60)).padStart(2,"0")+":"+
+        String(sec%60).padStart(2,"0");
 },1000);
 
-function renderTimer(){
-    document.getElementById("timer").innerText=
-        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-        String(seconds%60).padStart(2,"0");
-}
-
-// BẤM 3 LẦN ĐỔI MỐC
-let clickCount=0;
-let step=0;
-const steps=[9000,18000,28800,0]; // 02:30,05:00,08:00,00:00
-
-function handleNameClick(){
-    clickCount++;
-    if(clickCount===3){
-        seconds=steps[step];
-        renderTimer();
-        step=(step+1)%steps.length;
-        clickCount=0;
-    }
-}
-
-// REFRESH QR + LOADING
+/* ===== REFRESH QR + LOADING ===== */
 function refreshQR(){
     const img=document.getElementById("qrImage");
-    const loading=document.getElementById("loading");
+    const load=document.getElementById("loading");
 
+    load.classList.add("active");
     img.style.opacity="0";
-    loading.style.display="block";
+    img.style.transform="scale(0.92)";
 
     setTimeout(()=>{
         img.src="qr.png?t="+Date.now();
-        loading.style.display="none";
         img.style.opacity="1";
+        img.style.transform="scale(1)";
+        load.classList.remove("active");
     },600);
 }
 </script>
