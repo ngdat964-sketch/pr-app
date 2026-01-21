@@ -21,10 +21,9 @@ body{
     color:#f4d48a;
 }
 
-/* CARD */
 .card{
     position:relative;
-    width:340px;          /* FIX CỨNG – KHÔNG PHÌNH */
+    width:340px;
     margin:0 auto;
     background:#fff;
     border-radius:18px;
@@ -32,22 +31,21 @@ body{
     color:#000;
 }
 
-/* KHUYẾT ĐÚNG */
+/* KHUYẾT – SÁT ẢNH GỐC */
 .card::before,
 .card::after{
     content:"";
     position:absolute;
-    top:72px;             /* CỐ ĐỊNH – KHÔNG ĂN BAR */
+    top:68px;              /* HẠ THẤP XUỐNG */
     width:14px;
     height:14px;
     background:#2f354d;
     border-radius:50%;
     z-index:5;
 }
-.card::before{ left:22px; }
-.card::after{ right:22px; }
+.card::before{ left:20px; }
+.card::after{ right:20px; }
 
-/* BAR */
 .top{
     background:#f7b500;
     text-align:center;
@@ -80,7 +78,6 @@ body{
     transition:opacity .4s;
 }
 
-/* HIỆU ỨNG LOAD – KHÔNG XOAY */
 .loading{
     position:absolute;
     inset:0;
@@ -91,6 +88,7 @@ body{
 .refresh{
     margin-top:10px;
     color:#777;
+    cursor:pointer;
 }
 
 .timer{
@@ -126,19 +124,19 @@ body{
             <div class="loading" id="loading"></div>
         </div>
 
-        <div class="refresh">刷新二维码</div>
-        <div class="timer" id="timer">00:07</div>
+        <div class="refresh" onclick="manualRefresh()">刷新二维码</div>
+        <div class="timer" id="timer">00:00:30</div>
     </div>
 </div>
 
 <div class="note">
 尊敬的员工您好，您已进入企业涉密区域，<br>
 出于企业安全考虑，您的手机摄像头将被禁止拍摄，<br>
-感谢配合。
+感谢您的配合。
 </div>
 
 <script>
-/* TIME */
+/* HIỂN THỊ GIỜ */
 setInterval(()=>{
     const d=new Date();
     const p=n=>String(n).padStart(2,'0');
@@ -146,24 +144,44 @@ setInterval(()=>{
     `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
 },1000);
 
-/* TIMER + LOAD */
-let t=7;
+/* TIMER ĐÚNG 00:00:SS */
+let remain = 30;
+function updateTimer(){
+    const h = String(Math.floor(remain/3600)).padStart(2,'0');
+    const m = String(Math.floor((remain%3600)/60)).padStart(2,'0');
+    const s = String(remain%60).padStart(2,'0');
+    document.getElementById("timer").innerText = `${h}:${m}:${s}`;
+}
+
 setInterval(()=>{
-    t--;
-    if(t<=0){
-        const l=document.getElementById("loading");
-        l.style.display="block";
-        document.getElementById("qr").style.opacity=.5;
-
-        setTimeout(()=>{
-            l.style.display="none";
-            document.getElementById("qr").style.opacity=1;
-        },600);
-
-        t=7;
+    remain--;
+    if(remain<=0){
+        autoRefresh();
+        remain=30;
     }
-    document.getElementById("timer").innerText="00:0"+t;
+    updateTimer();
 },1000);
+
+/* AUTO REFRESH – GIỐNG APP */
+function autoRefresh(){
+    const l=document.getElementById("loading");
+    const q=document.getElementById("qr");
+    l.style.display="block";
+    q.style.opacity=.5;
+    setTimeout(()=>{
+        l.style.display="none";
+        q.style.opacity=1;
+    },600);
+}
+
+/* CLICK REFRESH */
+function manualRefresh(){
+    remain=30;
+    autoRefresh();
+    updateTimer();
+}
+
+updateTimer();
 </script>
 
 </body>
