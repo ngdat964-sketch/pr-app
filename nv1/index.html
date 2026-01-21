@@ -5,111 +5,129 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Access</title>
 
-<!-- ICON APP -->
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <style>
-body {
-    margin: 0;
-    background: #2f3347;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    color: #fff;
+body{
+    margin:0;
+    background:#2f3347;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    color:#fff;
 }
 
 /* TÊN + MÃ NV */
-.name {
-    margin: 28px 0 18px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #f0d58c;
-    cursor: pointer;
+.name{
+    margin:25px 0 15px;
+    font-size:22px;
+    font-weight:bold;
+    color:#f0d58c;
+    cursor:pointer;
 }
 
 /* CARD */
-.card {
-    width: 92%;
-    max-width: 380px;
-    margin: 0 auto;
-    background: #ffffff;
-    border-radius: 22px;
-    padding-bottom: 28px;
-    color: #000;
+.card{
+    width:90%;
+    max-width:360px;
+    margin:0 auto;
+    background:#fff;
+    border-radius:20px;
+    padding-bottom:25px;
+    color:#000;
+    overflow:hidden;
 }
 
 /* THANH VÀNG + KHUYẾT */
-.card-header {
-    position: relative;
-    background: #ffb703;
-    color: #fff;
-    padding: 16px;
-    font-size: 16px;
-    border-radius: 22px 22px 0 0;
+.card-header{
+    background:#ffb703;
+    color:#fff;
+    padding:14px;
+    font-size:16px;
+    position:relative;
 }
 
-.card-header::after {
-    content: "";
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 34px;
-    height: 12px;
-    background: #ffffff;
-    border-radius: 0 0 16px 16px;
+.card-header::after{
+    content:"";
+    position:absolute;
+    bottom:-12px;
+    left:50%;
+    transform:translateX(-50%);
+    width:60px;
+    height:24px;
+    background:#fff;
+    border-radius:0 0 30px 30px;
 }
 
-/* NGÀY + GIỜ (1 DÒNG) */
-.datetime {
-    margin: 30px 0 18px;
-    font-size: 22px;
-    font-weight: bold;
-    white-space: nowrap;
+/* DATETIME 1 DÒNG */
+.datetime{
+    margin:20px 0 10px;
+    font-size:20px;
+    font-weight:bold;
+    white-space:nowrap;
 }
 
 /* QR */
-.qr {
-    margin: 8px auto;
-    width: 280px;
+.qr{
+    margin:10px auto;
+    width:260px;
+    position:relative;
 }
-.qr img {
-    width: 100%;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+
+.qr img{
+    width:100%;
+    transition:opacity .25s ease, transform .25s ease;
+}
+
+/* LOADING XOAY */
+.loading{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:60px;
+    height:60px;
+    border:5px solid #ddd;
+    border-top:5px solid #ffb703;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    display:none;
+}
+
+@keyframes spin{
+    from{transform:translate(-50%,-50%) rotate(0)}
+    to{transform:translate(-50%,-50%) rotate(360deg)}
 }
 
 /* REFRESH */
-.refresh {
-    margin-top: 10px;
-    color: #888;
-    font-size: 14px;
-    cursor: pointer;
+.refresh{
+    margin-top:10px;
+    color:#999;
+    font-size:14px;
+    cursor:pointer;
 }
 
 /* TIMER */
-.timer {
-    margin-top: 8px;
-    font-size: 26px;
-    font-weight: bold;
-    color: #2ecc71;
+.timer{
+    margin-top:8px;
+    font-size:26px;
+    font-weight:bold;
+    color:#2ecc71;
 }
 
-/* NOTE - 3 DÒNG */
-.note {
-    margin: 30px auto;
-    max-width: 330px;
-    font-size: 14px;
-    color: #bfc3d9;
-    line-height: 1.9;
-    text-align: center;
+/* NOTE */
+.note{
+    margin:30px 20px;
+    font-size:14px;
+    color:#bfc3d9;
+    line-height:1.6;
 }
 </style>
 </head>
 
 <body>
 
-<!-- BẤM 3 LẦN VÀO TÊN -->
 <div class="name" onclick="handleNameClick()">
 V25101874 (Nguyễn Đức Anh)
 </div>
@@ -123,6 +141,7 @@ V25101874 (Nguyễn Đức Anh)
     <div class="datetime" id="datetime"></div>
 
     <div class="qr">
+        <div class="loading" id="loading"></div>
         <img id="qrImage" src="qr.png">
     </div>
 
@@ -131,76 +150,69 @@ V25101874 (Nguyễn Đức Anh)
     </div>
 
     <div class="timer" id="timer">00:00:00</div>
-
 </div>
 
 <div class="note">
-尊敬的员工您好，您已进入企业涉密区域，<br>
-出于企业安全考虑，您的手机摄像头将被禁止拍摄，<br>
-感谢您的配合。
+尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
 </div>
 
 <script>
-// ===== NGÀY + GIỜ =====
-function updateDateTime() {
-    const n = new Date();
-    const text =
-        n.getFullYear() + "-" +
-        String(n.getMonth() + 1).padStart(2, "0") + "-" +
-        String(n.getDate()).padStart(2, "0") + " " +
-        String(n.getHours()).padStart(2, "0") + ":" +
-        String(n.getMinutes()).padStart(2, "0") + ":" +
-        String(n.getSeconds()).padStart(2, "0");
-    document.getElementById("datetime").innerText = text;
+// DATETIME
+function updateDateTime(){
+    const n=new Date();
+    document.getElementById("datetime").innerText=
+        n.getFullYear()+"-"+
+        String(n.getMonth()+1).padStart(2,"0")+"-"+
+        String(n.getDate()).padStart(2,"0")+" "+
+        String(n.getHours()).padStart(2,"0")+":"+
+        String(n.getMinutes()).padStart(2,"0")+":"+
+        String(n.getSeconds()).padStart(2,"0");
 }
-setInterval(updateDateTime, 1000);
+setInterval(updateDateTime,1000);
 updateDateTime();
 
-// ===== TIMER =====
-let seconds = 0;
-setInterval(() => {
+// TIMER
+let seconds=0;
+setInterval(()=>{
     seconds++;
     renderTimer();
-}, 1000);
+},1000);
 
-function renderTimer() {
-    document.getElementById("timer").innerText =
-        String(Math.floor(seconds / 3600)).padStart(2, "0") + ":" +
-        String(Math.floor((seconds % 3600) / 60)).padStart(2, "0") + ":" +
-        String(seconds % 60).padStart(2, "0");
+function renderTimer(){
+    document.getElementById("timer").innerText=
+        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
+        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
+        String(seconds%60).padStart(2,"0");
 }
 
-// ===== BẤM 3 LẦN → NHẢY MỐC =====
-let clickCount = 0;
-let step = 0;
-const steps = [
-    2 * 3600 + 30 * 60,
-    5 * 3600,
-    8 * 3600,
-    0
-];
+// BẤM 3 LẦN ĐỔI MỐC
+let clickCount=0;
+let step=0;
+const steps=[9000,18000,28800,0]; // 02:30,05:00,08:00,00:00
 
-function handleNameClick() {
+function handleNameClick(){
     clickCount++;
-    if (clickCount === 3) {
-        seconds = steps[step];
+    if(clickCount===3){
+        seconds=steps[step];
         renderTimer();
-        step = (step + 1) % steps.length;
-        clickCount = 0;
+        step=(step+1)%steps.length;
+        clickCount=0;
     }
 }
 
-// ===== QR NHẢY + HIỆU ỨNG =====
-function refreshQR() {
-    const img = document.getElementById("qrImage");
-    img.style.opacity = "0";
-    img.style.transform = "scale(0.9)";
+// REFRESH QR + LOADING
+function refreshQR(){
+    const img=document.getElementById("qrImage");
+    const loading=document.getElementById("loading");
 
-    setTimeout(() => {
-        img.src = "qr.png?t=" + Date.now();
-        img.style.opacity = "1";
-        img.style.transform = "scale(1)";
-    }, 200);
+    img.style.opacity="0";
+    loading.style.display="block";
+
+    setTimeout(()=>{
+        img.src="qr.png?t="+Date.now();
+        loading.style.display="none";
+        img.style.opacity="1";
+    },600);
 }
 </script>
 
