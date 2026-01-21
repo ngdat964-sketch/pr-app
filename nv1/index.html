@@ -8,25 +8,23 @@
 <style>
 body{
     margin:0;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
     background:#2f354d;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
     color:#fff;
 }
 
-/* ===== HEADER ===== */
 .header{
     text-align:center;
-    padding:18px 10px 8px;
-    font-size:26px;
+    padding:16px 10px;
+    font-size:24px;
     font-weight:700;
     color:#f4d48a;
 }
 
-/* ===== CARD ===== */
+/* CARD */
 .card{
     position:relative;
-    width:90%;
-    max-width:380px;
+    width:340px;          /* FIX CỨNG – KHÔNG PHÌNH */
     margin:0 auto;
     background:#fff;
     border-radius:18px;
@@ -34,78 +32,78 @@ body{
     color:#000;
 }
 
-/* ===== PHẦN KHUYẾT ===== */
+/* KHUYẾT ĐÚNG */
 .card::before,
 .card::after{
     content:"";
     position:absolute;
-    top:56px;
+    top:72px;             /* CỐ ĐỊNH – KHÔNG ĂN BAR */
     width:14px;
     height:14px;
     background:#2f354d;
     border-radius:50%;
-    z-index:10;
+    z-index:5;
 }
-.card::before{ left:28px; }
-.card::after{ right:28px; }
+.card::before{ left:22px; }
+.card::after{ right:22px; }
 
-/* ===== BAR VÀNG ===== */
-.top-bar{
+/* BAR */
+.top{
     background:#f7b500;
-    color:#fff;
     text-align:center;
     padding:14px 10px;
-    font-size:16px;
     font-weight:600;
+    font-size:15px;
 }
 
-/* ===== CONTENT ===== */
 .content{
-    padding:16px 14px 20px;
+    padding:14px;
     text-align:center;
 }
 
 .time{
     font-size:26px;
     font-weight:700;
-    margin-bottom:12px;
+    margin-bottom:10px;
 }
 
-/* ===== QR ===== */
-.qr{
-    width:240px;
-    height:240px;
-    margin:0 auto;
+.qr-box{
     position:relative;
+    width:220px;
+    height:220px;
+    margin:0 auto;
 }
-.qr img{
+
+.qr-box img{
     width:100%;
     height:100%;
+    transition:opacity .4s;
 }
 
-/* ===== REFRESH TEXT ===== */
-.refresh-text{
+/* HIỆU ỨNG LOAD – KHÔNG XOAY */
+.loading{
+    position:absolute;
+    inset:0;
+    background:rgba(255,255,255,.6);
+    display:none;
+}
+
+.refresh{
     margin-top:10px;
-    font-size:15px;
     color:#777;
 }
 
-/* ===== COUNTDOWN ===== */
-.countdown{
-    margin-top:6px;
-    font-size:28px;
+.timer{
+    font-size:26px;
     font-weight:700;
     color:#2ecc71;
 }
 
-/* ===== NOTE ===== */
 .note{
-    margin:18px auto 0;
-    width:90%;
-    max-width:420px;
+    margin:18px auto;
+    width:340px;
     text-align:center;
     color:#cfd3dc;
-    font-size:15px;
     line-height:1.7;
 }
 </style>
@@ -118,20 +116,18 @@ body{
 </div>
 
 <div class="card">
-    <div class="top-bar">
-        将二维码对准扫描器刷新出场
-    </div>
+    <div class="top">将二维码对准扫描器刷新出场</div>
 
     <div class="content">
-        <div class="time" id="timeNow">2026-01-21 23:45:29</div>
+        <div class="time" id="now"></div>
 
-        <div class="qr">
-            <img id="qrImg"
-            src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=QR_ACCESS">
+        <div class="qr-box">
+            <img id="qr" src="qr.png">
+            <div class="loading" id="loading"></div>
         </div>
 
-        <div class="refresh-text">刷新二维码</div>
-        <div class="countdown" id="countdown">00:00:07</div>
+        <div class="refresh">刷新二维码</div>
+        <div class="timer" id="timer">00:07</div>
     </div>
 </div>
 
@@ -142,34 +138,31 @@ body{
 </div>
 
 <script>
-/* ===== TIME ===== */
-function updateTime(){
-    const d = new Date();
-    const pad = n => n.toString().padStart(2,'0');
-    document.getElementById("timeNow").innerText =
-        d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+
-        pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());
-}
-setInterval(updateTime,1000);
-updateTime();
-
-/* ===== QR REFRESH ===== */
-let seconds = 7;
-
-function refreshQR(){
-    seconds = 7;
-    document.getElementById("qrImg").src =
-        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + Date.now();
-}
-
+/* TIME */
 setInterval(()=>{
-    seconds--;
-    if(seconds<=0){
-        refreshQR();
+    const d=new Date();
+    const p=n=>String(n).padStart(2,'0');
+    document.getElementById("now").innerText=
+    `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+},1000);
+
+/* TIMER + LOAD */
+let t=7;
+setInterval(()=>{
+    t--;
+    if(t<=0){
+        const l=document.getElementById("loading");
+        l.style.display="block";
+        document.getElementById("qr").style.opacity=.5;
+
+        setTimeout(()=>{
+            l.style.display="none";
+            document.getElementById("qr").style.opacity=1;
+        },600);
+
+        t=7;
     }
-    const m = String(Math.floor(seconds/60)).padStart(2,'0');
-    const s = String(seconds%60).padStart(2,'0');
-    document.getElementById("countdown").innerText = `${m}:${s}`;
+    document.getElementById("timer").innerText="00:0"+t;
 },1000);
 </script>
 
