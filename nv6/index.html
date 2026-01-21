@@ -15,7 +15,6 @@ html, body {
     height: 100%;
     overflow: hidden;
     background: black;
-    touch-action: none;
 }
 img {
     width: 100%;
@@ -25,9 +24,10 @@ img {
 }
 </style>
 </head>
-
 <body>
+
 <img id="img">
+
 <script>
 const params = new URLSearchParams(location.search);
 const isApp = params.get("mode") === "app";
@@ -35,5 +35,6 @@ const isApp = params.get("mode") === "app";
 document.getElementById("img").src =
     isApp ? "app.jpg" : "web.jpg";
 </script>
+
 </body>
 </html>
