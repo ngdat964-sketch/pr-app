@@ -10,7 +10,13 @@
                maximum-scale=1.0,
                user-scalable=no">
 
-<title>NV6</title>
+<title>NV6 Image</title>
+
+<!-- ICON cho iPhone -->
+<link rel="apple-touch-icon" href="icon.png">
+
+<!-- MANIFEST cho Android -->
+<link rel="manifest" href="manifest.json">
 
 <style>
 html, body {
@@ -21,6 +27,7 @@ html, body {
     background: black;
     touch-action: none;
 }
+
 img {
     width: 100%;
     height: 100%;
@@ -31,31 +38,6 @@ img {
 </head>
 
 <body>
-<img id="img">
-
-<script>
-function guessIsApp() {
-    // 1️⃣ Kiểm tra standalone (có lúc đúng)
-    if (window.matchMedia('(display-mode: standalone)').matches) {
-        return true;
-    }
-
-    // 2️⃣ iOS
-    if (window.navigator.standalone === true) {
-        return true;
-    }
-
-    // 3️⃣ Đoán theo kích thước (fullscreen thường là app)
-    if (window.innerHeight === screen.height) {
-        return true;
-    }
-
-    return false;
-}
-
-const img = document.getElementById("img");
-img.src = guessIsApp() ? "app.jpg" : "web.jpg";
-</script>
-
+<img src="image.jpg" alt="">
 </body>
 </html>
