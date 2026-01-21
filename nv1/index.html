@@ -1,218 +1,195 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>QR Access</title>
-
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <style>
 body{
     margin:0;
-    background:#2f3347;
-    font-family:Arial,sans-serif;
-    text-align:center;
+    font-family: Arial, Helvetica, sans-serif;
+    background:#2f3448;
     color:#fff;
 }
 
-/* TÊN + MÃ NV */
-.name{
-    margin:24px 0 14px;
+/* Header tên NV */
+.header{
+    text-align:center;
+    padding:18px 10px;
     font-size:22px;
     font-weight:bold;
-    color:#f0d58c;
-    cursor:pointer;
+    color:#f6d77a;
 }
 
-/* CARD */
+/* Card */
 .card{
     width:90%;
     max-width:360px;
     margin:0 auto;
     background:#fff;
-    border-radius:20px;
-    padding-bottom:24px;
     color:#000;
+    border-radius:18px;
     overflow:hidden;
-}
-
-/* HEADER VÀNG */
-.card-header{
     position:relative;
-    background:#ffb703;
-    color:#fff;
-    padding:14px;
-    font-size:16px;
 }
 
-/* KHÓA KHÔNG CHO BO TRÒN LẠ */
-.card-header::before,
-.card-header::after{
+/* Thanh vàng */
+.card-top{
+    background:#ffbe0b;
+    text-align:center;
+    padding:14px 10px;
+    font-size:15px;
+    font-weight:600;
+}
+
+/* Khuyết hai bên */
+.card-top::before,
+.card-top::after{
     content:"";
     position:absolute;
-    bottom:-14px;
-    width:28px;
-    height:28px;
-    background:#fff;
+    top:48px;
+    width:26px;
+    height:26px;
+    background:#2f3448;
     border-radius:50%;
 }
+.card-top::before{ left:-13px; }
+.card-top::after{ right:-13px; }
 
-/* KHuyết TRÁI */
-.card-header::before{
-    left:50px;
+/* Nội dung */
+.content{
+    text-align:center;
+    padding:16px 10px 20px;
 }
 
-/* KHuyết PHẢI */
-.card-header::after{
-    right:50px;
-}
-
-/* NGÀY GIỜ */
 .datetime{
-    margin:18px 0 10px;
     font-size:20px;
     font-weight:bold;
-    white-space:nowrap;
+    margin-bottom:12px;
 }
 
 /* QR */
-.qr{
-    margin:10px auto;
-    width:260px;
+.qr-box{
+    width:220px;
+    height:220px;
+    margin:0 auto 12px;
     position:relative;
 }
-.qr img{
+.qr-box img{
     width:100%;
-    transition:transform .4s ease, opacity .3s ease;
+    height:100%;
+    transition:transform 0.6s ease, opacity 0.4s ease;
+}
+.qr-box.loading img{
+    transform:rotate(360deg) scale(0.9);
+    opacity:0.4;
 }
 
-/* LOADING XOAY */
-.loading{
-    animation:spin .6s linear;
-}
-@keyframes spin{
-    from{transform:rotate(0deg) scale(.9);}
-    to{transform:rotate(360deg) scale(1);}
-}
-
-/* REFRESH */
-.refresh{
-    margin-top:10px;
+/* Text */
+.refresh-text{
     font-size:14px;
-    color:#999;
-    cursor:pointer;
+    color:#777;
+    margin-bottom:6px;
 }
 
-/* TIMER */
+/* Time */
 .timer{
-    margin-top:8px;
-    font-size:26px;
+    font-size:28px;
     font-weight:bold;
     color:#2ecc71;
 }
 
-/* NOTE */
+/* Chú thích */
 .note{
-    margin:30px 20px;
+    width:90%;
+    max-width:380px;
+    margin:18px auto;
     font-size:14px;
-    color:#bfc3d9;
-    line-height:1.6;
+    line-height:1.5;
+    color:#cfd3ff;
 }
 </style>
 </head>
 
 <body>
 
-<div class="name" onclick="handleNameClick()">
-V25101874 (Nguyễn Đức Anh)
+<div class="header" id="employee">
+    V25021784 (Hoàng A Toàn)
 </div>
 
 <div class="card">
-
-    <div class="card-header">
+    <div class="card-top">
         将二维码对准扫描器刷新出场
     </div>
 
-    <div class="datetime" id="datetime"></div>
+    <div class="content">
+        <div class="datetime" id="datetime"></div>
 
-    <div class="qr">
-        <img id="qrImage" src="qr.png">
+        <div class="qr-box" id="qrBox">
+            <img id="qrImg" src="qr1.png">
+        </div>
+
+        <div class="refresh-text">刷新二维码</div>
+        <div class="timer" id="timer">00:00:00</div>
     </div>
-
-    <div class="refresh" onclick="refreshQR()">刷新二维码</div>
-
-    <div class="timer" id="timer">00:00:00</div>
-
 </div>
 
 <div class="note">
-尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
+    尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，
+    您的手机摄像头将被禁止拍摄，感谢您的配合。
 </div>
 
 <script>
-// ===== DATE TIME =====
+/* ====== Thời gian thực ====== */
 function updateDateTime(){
-    const n=new Date();
-    document.getElementById("datetime").innerText=
-        n.getFullYear()+"-"+
-        String(n.getMonth()+1).padStart(2,"0")+"-"+
-        String(n.getDate()).padStart(2,"0")+" "+
-        String(n.getHours()).padStart(2,"0")+":"+
-        String(n.getMinutes()).padStart(2,"0")+":"+
-        String(n.getSeconds()).padStart(2,"0");
+    const d = new Date();
+    const f = n => n.toString().padStart(2,'0');
+    document.getElementById('datetime').innerText =
+        `${d.getFullYear()}-${f(d.getMonth()+1)}-${f(d.getDate())} `
+      + `${f(d.getHours())}:${f(d.getMinutes())}:${f(d.getSeconds())}`;
 }
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// ===== TIMER =====
-let seconds=0;
+/* ====== Timer ====== */
+let seconds = 0;
+let presetIndex = 0;
+const presets = [0, 9000, 18000, 28800]; // 0, 2h30, 5h, 8h
+
+function renderTimer(){
+    const h = Math.floor(seconds/3600);
+    const m = Math.floor((seconds%3600)/60);
+    const s = seconds%60;
+    document.getElementById('timer').innerText =
+        `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
 setInterval(()=>{
     seconds++;
     renderTimer();
 },1000);
 
-function renderTimer(){
-    document.getElementById("timer").innerText=
-        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-        String(seconds%60).padStart(2,"0");
-}
+/* ====== Click mã NV ====== */
+document.getElementById('employee').onclick = ()=>{
+    presetIndex = (presetIndex + 1) % presets.length;
+    seconds = presets[presetIndex];
+    renderTimer();
+};
 
-// ===== CLICK 3 LẦN =====
-let clickCount=0;
-let step=0;
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
+/* ====== QR đổi + hiệu ứng ====== */
+let qrState = 0;
+setInterval(()=>{
+    const box = document.getElementById('qrBox');
+    const img = document.getElementById('qrImg');
 
-function handleNameClick(){
-    clickCount++;
-    if(clickCount===3){
-        seconds=steps[step];
-        renderTimer();
-        step=(step+1)%steps.length;
-        clickCount=0;
-    }
-}
-
-// ===== QR EFFECT =====
-function refreshQR(){
-    const img=document.getElementById("qrImage");
-    img.classList.add("loading");
-    img.style.opacity="0";
-
+    box.classList.add('loading');
     setTimeout(()=>{
-        img.src="qr.png?t="+Date.now();
-        img.style.opacity="1";
-        img.classList.remove("loading");
-    },300);
-}
+        qrState = 1 - qrState;
+        img.src = qrState ? 'qr2.png' : 'qr1.png';
+        box.classList.remove('loading');
+    },400);
+},5000);
 </script>
 
 </body>
