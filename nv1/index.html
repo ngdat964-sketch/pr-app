@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Access</title>
 
+<!-- ICON APP -->
 <link rel="apple-touch-icon" href="icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -20,61 +21,58 @@ body {
 
 /* TÊN + MÃ NV */
 .name {
-    margin: 25px 0 15px;
+    margin: 28px 0 18px;
     font-size: 22px;
     font-weight: bold;
     color: #f0d58c;
     cursor: pointer;
 }
 
-/* CARD (thu nhỏ nhẹ khi add màn hình chính) */
+/* CARD */
 .card {
-    width: 90%;
-    max-width: 360px;
+    width: 92%;
+    max-width: 380px;
     margin: 0 auto;
     background: #ffffff;
-    border-radius: 20px;
-    padding-bottom: 25px;
+    border-radius: 22px;
+    padding-bottom: 28px;
     color: #000;
-    transform: scale(0.96);
-    transform-origin: top center;
 }
 
-/* THANH VÀNG + KHÓT GIỮA */
+/* THANH VÀNG + KHUYẾT */
 .card-header {
     position: relative;
     background: #ffb703;
     color: #fff;
-    padding: 14px;
+    padding: 16px;
     font-size: 16px;
-    border-radius: 20px 20px 0 0;
+    border-radius: 22px 22px 0 0;
 }
 
-/* tạo khuyết giống app */
 .card-header::after {
     content: "";
     position: absolute;
-    bottom: -10px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    width: 42px;
-    height: 20px;
+    width: 34px;
+    height: 12px;
     background: #ffffff;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 16px 16px;
 }
 
-/* NGÀY + GIỜ 1 HÀNG */
+/* NGÀY + GIỜ (1 DÒNG) */
 .datetime {
-    margin: 25px 0 15px;
-    font-size: 20px;
+    margin: 30px 0 18px;
+    font-size: 22px;
     font-weight: bold;
     white-space: nowrap;
 }
 
 /* QR */
 .qr {
-    margin: 10px auto;
-    width: 260px;
+    margin: 8px auto;
+    width: 280px;
 }
 .qr img {
     width: 100%;
@@ -97,13 +95,13 @@ body {
     color: #2ecc71;
 }
 
-/* NOTE – 3 DÒNG GIỐNG APP */
+/* NOTE - 3 DÒNG */
 .note {
-    margin: 28px auto;
-    max-width: 320px;
+    margin: 30px auto;
+    max-width: 330px;
     font-size: 14px;
     color: #bfc3d9;
-    line-height: 1.8;
+    line-height: 1.9;
     text-align: center;
 }
 </style>
@@ -111,6 +109,7 @@ body {
 
 <body>
 
+<!-- BẤM 3 LẦN VÀO TÊN -->
 <div class="name" onclick="handleNameClick()">
 V25101874 (Nguyễn Đức Anh)
 </div>
@@ -145,13 +144,14 @@ V25101874 (Nguyễn Đức Anh)
 // ===== NGÀY + GIỜ =====
 function updateDateTime() {
     const n = new Date();
-    document.getElementById("datetime").innerText =
+    const text =
         n.getFullYear() + "-" +
         String(n.getMonth() + 1).padStart(2, "0") + "-" +
         String(n.getDate()).padStart(2, "0") + " " +
         String(n.getHours()).padStart(2, "0") + ":" +
         String(n.getMinutes()).padStart(2, "0") + ":" +
         String(n.getSeconds()).padStart(2, "0");
+    document.getElementById("datetime").innerText = text;
 }
 setInterval(updateDateTime, 1000);
 updateDateTime();
@@ -170,10 +170,15 @@ function renderTimer() {
         String(seconds % 60).padStart(2, "0");
 }
 
-// ===== BẤM 3 LẦN =====
+// ===== BẤM 3 LẦN → NHẢY MỐC =====
 let clickCount = 0;
 let step = 0;
-const steps = [9000, 18000, 28800, 0];
+const steps = [
+    2 * 3600 + 30 * 60,
+    5 * 3600,
+    8 * 3600,
+    0
+];
 
 function handleNameClick() {
     clickCount++;
@@ -185,11 +190,12 @@ function handleNameClick() {
     }
 }
 
-// ===== QR NHÁY =====
+// ===== QR NHẢY + HIỆU ỨNG =====
 function refreshQR() {
     const img = document.getElementById("qrImage");
     img.style.opacity = "0";
-    img.style.transform = "scale(0.92)";
+    img.style.transform = "scale(0.9)";
+
     setTimeout(() => {
         img.src = "qr.png?t=" + Date.now();
         img.style.opacity = "1";
