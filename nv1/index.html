@@ -43,7 +43,7 @@ body{
     font-size:14px;
 }
 
-/* KHUYẾT – BÉ GẤP ĐÔI */
+/* KHUYẾT */
 .card-header::before,
 .card-header::after{
     content:"";
@@ -54,7 +54,6 @@ body{
     background:#2f3347;
     border-radius:50%;
 }
-
 .card-header::before{ left:-7px; }
 .card-header::after{ right:-7px; }
 
@@ -72,7 +71,6 @@ body{
     width:230px;
     position:relative;
 }
-
 .qr img{
     width:100%;
     transition:opacity .3s ease;
@@ -92,10 +90,7 @@ body{
     animation:spin .8s linear infinite;
     display:none;
 }
-
-@keyframes spin{
-    to{transform:rotate(360deg);}
-}
+@keyframes spin{ to{transform:rotate(360deg);} }
 
 /* REFRESH */
 .refresh{
@@ -121,10 +116,9 @@ body{
     line-height:1.85;
 }
 
-/* DÒNG 3 CÙNG HÀNG DÒNG 2 */
-.note .line3{
-    display:inline;
-    margin-left:4px;
+/* ÉP DÒNG 2 + 3 CÙNG HÀNG */
+.note .line23{
+    white-space:nowrap;
 }
 </style>
 </head>
@@ -156,8 +150,9 @@ Nguyễn Đức Anh (V25101874)
 
 <div class="note">
 尊敬的员工您好，您已进入企业涉密区域，<br>
-出于企业安全考虑，您的手机摄像头将被禁止，
-<span class="line3">感谢您的配合。</span>
+<span class="line23">
+出于企业安全考虑，您的手机摄像头将被禁止，感谢您的配合。
+</span>
 </div>
 
 <script>
@@ -192,13 +187,7 @@ function renderTimer(){
 // CLICK 3 LẦN
 let clickCount=0;
 let step=0;
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
-
+const steps=[2*3600+30*60,5*3600,8*3600,0];
 document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
@@ -213,10 +202,8 @@ document.querySelector(".name").onclick=()=>{
 function refreshQR(){
     const img=document.getElementById("qrImage");
     const loading=document.getElementById("qrLoading");
-
     img.style.opacity="0.4";
     loading.style.display="block";
-
     setTimeout(()=>{
         img.src="qr.png?t="+Date.now();
         img.style.opacity="1";
