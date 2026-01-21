@@ -5,26 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Access</title>
 
-<link rel="apple-touch-icon" href="icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
 <style>
 body{
     margin:0;
-    background:#2f3347;
-    font-family:Arial,sans-serif;
-    text-align:center;
+    background:#2f3448;
+    font-family:Arial, sans-serif;
     color:#fff;
+    text-align:center;
 }
 
-/* TÊN */
+/* NAME */
 .name{
-    margin:26px 0 16px;
+    margin:22px 0 14px;
     font-size:22px;
     font-weight:bold;
-    color:#f0d58c;
-    cursor:pointer;
+    color:#f1d38a;
 }
 
 /* CARD */
@@ -34,29 +29,29 @@ body{
     margin:0 auto;
     background:#fff;
     border-radius:22px;
-    padding-bottom:26px;
+    padding-bottom:24px;
     color:#000;
     position:relative;
 }
 
 /* HEADER */
 .card-header{
-    position:relative;
     background:#ffb703;
     color:#fff;
-    padding:16px;
-    font-size:16px;
+    padding:14px;
+    font-size:15px;
     border-radius:22px 22px 0 0;
+    position:relative;
 }
 
 /* KHUYẾT TRÁI */
 .card-header::before{
     content:"";
     position:absolute;
-    bottom:-14px;
-    left:36px;
-    width:28px;
-    height:28px;
+    bottom:-10px;
+    left:40px;
+    width:20px;
+    height:20px;
     background:#fff;
     border-radius:50%;
 }
@@ -65,26 +60,25 @@ body{
 .card-header::after{
     content:"";
     position:absolute;
-    bottom:-14px;
-    right:36px;
-    width:28px;
-    height:28px;
+    bottom:-10px;
+    right:40px;
+    width:20px;
+    height:20px;
     background:#fff;
     border-radius:50%;
 }
 
-/* DATE */
+/* DATETIME */
 .datetime{
-    margin:28px 0 16px;
-    font-size:21px;
+    margin:24px 0 14px;
+    font-size:22px;
     font-weight:bold;
-    white-space:nowrap;
 }
 
 /* QR */
 .qr{
-    margin:6px auto;
     width:260px;
+    margin:0 auto;
     position:relative;
 }
 
@@ -122,7 +116,7 @@ body{
 
 /* TIMER */
 .timer{
-    margin-top:8px;
+    margin-top:6px;
     font-size:26px;
     font-weight:bold;
     color:#2ecc71;
@@ -130,18 +124,18 @@ body{
 
 /* NOTE – 3 DÒNG */
 .note{
-    margin:28px auto;
+    margin:26px auto;
     max-width:320px;
     font-size:14px;
-    color:#bfc3d9;
-    line-height:1.8;
+    color:#c6c9de;
+    line-height:1.9;
 }
 </style>
 </head>
 
 <body>
 
-<div class="name" onclick="handleNameClick()">
+<div class="name">
 V25101874 (Nguyễn Đức Anh)
 </div>
 
@@ -160,7 +154,7 @@ V25101874 (Nguyễn Đức Anh)
 
     <div class="refresh" onclick="refreshQR()">刷新二维码</div>
 
-    <div class="timer" id="timer">00:00:00</div>
+    <div class="timer" id="timer">05:00:03</div>
 
 </div>
 
@@ -171,50 +165,21 @@ V25101874 (Nguyễn Đức Anh)
 </div>
 
 <script>
-// DATE TIME
+// DATETIME
 function updateDateTime(){
-    const n=new Date();
+    const d=new Date();
     document.getElementById("datetime").innerText=
-        n.getFullYear()+"-"+
-        String(n.getMonth()+1).padStart(2,"0")+"-"+
-        String(n.getDate()).padStart(2,"0")+" "+
-        String(n.getHours()).padStart(2,"0")+":"+
-        String(n.getMinutes()).padStart(2,"0")+":"+
-        String(n.getSeconds()).padStart(2,"0");
+        d.getFullYear()+"-"+
+        String(d.getMonth()+1).padStart(2,"0")+"-"+
+        String(d.getDate()).padStart(2,"0")+" "+
+        String(d.getHours()).padStart(2,"0")+":"+
+        String(d.getMinutes()).padStart(2,"0")+":"+
+        String(d.getSeconds()).padStart(2,"0");
 }
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER
-let seconds=0;
-setInterval(()=>{
-    seconds++;
-    renderTimer();
-},1000);
-
-function renderTimer(){
-    document.getElementById("timer").innerText=
-        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-        String(seconds%60).padStart(2,"0");
-}
-
-// CLICK 3 LẦN
-let clickCount=0;
-let step=0;
-const steps=[9000,18000,28800,0];
-
-function handleNameClick(){
-    clickCount++;
-    if(clickCount===3){
-        seconds=steps[step];
-        renderTimer();
-        step=(step+1)%steps.length;
-        clickCount=0;
-    }
-}
-
-// QR LOAD – MỜ + LOADING
+// QR LOAD
 function refreshQR(){
     const img=document.getElementById("qrImage");
     const load=document.getElementById("qrLoading");
@@ -223,10 +188,10 @@ function refreshQR(){
     load.style.display="block";
 
     setTimeout(()=>{
-        img.src="qr.png?t="+Date.now();
+        img.src="qr.png?"+Date.now();
         img.style.opacity="1";
         load.style.display="none";
-    },600);
+    },700);
 }
 </script>
 
