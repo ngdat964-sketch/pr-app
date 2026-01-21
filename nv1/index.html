@@ -5,222 +5,172 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>QR Access</title>
 
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
-
 <style>
 body{
     margin:0;
-    background:#2f3347;
-    font-family:Arial,sans-serif;
-    text-align:center;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+    background:#2f354d;
     color:#fff;
 }
 
-/* ===== NAME ===== */
-.name{
-    margin:28px 0 16px;
-    font-size:22px;
-    font-weight:bold;
-    color:#f0d58c;
+/* ===== HEADER ===== */
+.header{
+    text-align:center;
+    padding:18px 10px 8px;
+    font-size:26px;
+    font-weight:700;
+    color:#f4d48a;
 }
 
 /* ===== CARD ===== */
 .card{
     position:relative;
-    width:86%;
-    max-width:360px;
+    width:90%;
+    max-width:380px;
     margin:0 auto;
     background:#fff;
-    border-radius:22px;
-    padding-bottom:26px;
+    border-radius:18px;
+    overflow:hidden;
     color:#000;
 }
 
-/* ===== HEADER ===== */
-.card-header{
-    background:#ffb703;
-    color:#fff;
-    padding:16px 12px;
-    font-size:16px;
-    border-radius:22px 22px 0 0;
-}
-
-/* ===== ĐIỂM KHUYẾT (ĐÚNG APP GỐC) ===== */
+/* ===== PHẦN KHUYẾT ===== */
 .card::before,
 .card::after{
     content:"";
     position:absolute;
-    top:64px;
-    width:18px;
-    height:18px;
-    background:#2f3347;
+    top:56px;
+    width:14px;
+    height:14px;
+    background:#2f354d;
     border-radius:50%;
-    z-index:3;
+    z-index:10;
+}
+.card::before{ left:28px; }
+.card::after{ right:28px; }
+
+/* ===== BAR VÀNG ===== */
+.top-bar{
+    background:#f7b500;
+    color:#fff;
+    text-align:center;
+    padding:14px 10px;
+    font-size:16px;
+    font-weight:600;
 }
 
-.card::before{ left:36px; }
-.card::after{ right:36px; }
+/* ===== CONTENT ===== */
+.content{
+    padding:16px 14px 20px;
+    text-align:center;
+}
 
-/* ===== DATETIME ===== */
-.datetime{
-    margin:26px 0 16px;
-    font-size:22px;
-    font-weight:bold;
-    white-space:nowrap;
+.time{
+    font-size:26px;
+    font-weight:700;
+    margin-bottom:12px;
 }
 
 /* ===== QR ===== */
 .qr{
-    margin:8px auto;
-    width:260px;
+    width:240px;
+    height:240px;
+    margin:0 auto;
     position:relative;
 }
-
 .qr img{
     width:100%;
-    transition:opacity .35s ease;
+    height:100%;
 }
 
-/* ===== LOADING ===== */
-.qr-loading{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:34px;
-    height:34px;
-    margin:-17px;
-    border:3px solid rgba(0,0,0,.2);
-    border-top-color:#ffb703;
-    border-radius:50%;
-    animation:spin .8s linear infinite;
-    display:none;
-}
-
-@keyframes spin{
-    to{transform:rotate(360deg);}
-}
-
-/* ===== REFRESH ===== */
-.refresh{
+/* ===== REFRESH TEXT ===== */
+.refresh-text{
     margin-top:10px;
-    color:#888;
-    font-size:14px;
+    font-size:15px;
+    color:#777;
 }
 
-/* ===== TIMER ===== */
-.timer{
+/* ===== COUNTDOWN ===== */
+.countdown{
     margin-top:6px;
-    font-size:26px;
-    font-weight:bold;
+    font-size:28px;
+    font-weight:700;
     color:#2ecc71;
 }
 
-/* ===== NOTE (3 DÒNG) ===== */
+/* ===== NOTE ===== */
 .note{
-    margin:28px auto;
-    max-width:320px;
-    font-size:14px;
-    color:#bfc3d9;
-    line-height:1.9;
+    margin:18px auto 0;
+    width:90%;
+    max-width:420px;
+    text-align:center;
+    color:#cfd3dc;
+    font-size:15px;
+    line-height:1.7;
 }
 </style>
 </head>
 
 <body>
 
-<div class="name">
-V25101874 (Nguyễn Đức Anh)
+<div class="header">
+    V25101874 (Nguyễn Đức Anh)
 </div>
 
 <div class="card">
-
-    <div class="card-header">
+    <div class="top-bar">
         将二维码对准扫描器刷新出场
     </div>
 
-    <div class="datetime" id="datetime"></div>
+    <div class="content">
+        <div class="time" id="timeNow">2026-01-21 23:45:29</div>
 
-    <div class="qr">
-        <img id="qrImage" src="qr.png">
-        <div class="qr-loading" id="qrLoading"></div>
+        <div class="qr">
+            <img id="qrImg"
+            src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=QR_ACCESS">
+        </div>
+
+        <div class="refresh-text">刷新二维码</div>
+        <div class="countdown" id="countdown">00:00:07</div>
     </div>
-
-    <div class="refresh" onclick="refreshQR()">刷新二维码</div>
-
-    <div class="timer" id="timer">00:00:00</div>
-
 </div>
 
 <div class="note">
 尊敬的员工您好，您已进入企业涉密区域，<br>
 出于企业安全考虑，您的手机摄像头将被禁止拍摄，<br>
-感谢您的配合。
+感谢配合。
 </div>
 
 <script>
-/* ===== DATETIME ===== */
-function updateDateTime(){
-    const n=new Date();
-    document.getElementById("datetime").innerText=
-        n.getFullYear()+"-"+
-        String(n.getMonth()+1).padStart(2,"0")+"-"+
-        String(n.getDate()).padStart(2,"0")+" "+
-        String(n.getHours()).padStart(2,"0")+":"+
-        String(n.getMinutes()).padStart(2,"0")+":"+
-        String(n.getSeconds()).padStart(2,"0");
+/* ===== TIME ===== */
+function updateTime(){
+    const d = new Date();
+    const pad = n => n.toString().padStart(2,'0');
+    document.getElementById("timeNow").innerText =
+        d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+" "+
+        pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds());
 }
-setInterval(updateDateTime,1000);
-updateDateTime();
+setInterval(updateTime,1000);
+updateTime();
 
-/* ===== TIMER ===== */
-let seconds=0;
-setInterval(()=>{
-    seconds++;
-    renderTimer();
-},1000);
+/* ===== QR REFRESH ===== */
+let seconds = 7;
 
-function renderTimer(){
-    document.getElementById("timer").innerText=
-        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-        String(seconds%60).padStart(2,"0");
-}
-
-/* ===== CLICK 3 LẦN ĐỔI TIME ===== */
-let clickCount=0;
-let step=0;
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
-
-document.querySelector(".name").onclick=()=>{
-    clickCount++;
-    if(clickCount===3){
-        seconds=steps[step];
-        renderTimer();
-        step=(step+1)%steps.length;
-        clickCount=0;
-    }
-};
-
-/* ===== REFRESH QR – MỜ + LOAD ===== */
 function refreshQR(){
-    const img=document.getElementById("qrImage");
-    const loading=document.getElementById("qrLoading");
-
-    img.style.opacity="0.35";
-    loading.style.display="block";
-
-    setTimeout(()=>{
-        img.src="qr.png?t="+Date.now();
-        img.style.opacity="1";
-        loading.style.display="none";
-    },600);
+    seconds = 7;
+    document.getElementById("qrImg").src =
+        "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + Date.now();
 }
+
+setInterval(()=>{
+    seconds--;
+    if(seconds<=0){
+        refreshQR();
+    }
+    const m = String(Math.floor(seconds/60)).padStart(2,'0');
+    const s = String(seconds%60).padStart(2,'0');
+    document.getElementById("countdown").innerText = `${m}:${s}`;
+},1000);
 </script>
 
 </body>
