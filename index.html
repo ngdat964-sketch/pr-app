@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Access</title>
+
+<!-- ICON APP -->
+<link rel="apple-touch-icon" href="icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<style>
+body {
+    margin: 0;
+    background: #2f3347;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: #fff;
+}
+
+/* TÊN + MÃ NV */
+.name {
+    margin: 25px 0 15px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #f0d58c; /* vàng nhạt */
+    cursor: pointer;
+}
+
+/* THẺ TRẮNG */
+.card {
+    width: 90%;
+    max-width: 360px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 20px;
+    padding-bottom: 25px;
+    color: #000;
+}
+
+/* THANH VÀNG */
+.card-header {
+    background: #ffb703;
+    color: #fff;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 20px 20px 0 0;
+}
+
+/* NGÀY GIỜ */
+.datetime {
+    margin: 15px 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* QR */
+.qr {
+    margin: 10px auto;
+    width: 260px;
+}
+.qr img {
+    width: 100%;
+}
+
+/* REFRESH */
+.refresh {
+    margin-top: 10px;
+    color: #999;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* TIMER */
+.timer {
+    margin-top: 8px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+/* GHI CHÚ */
+.note {
+    margin: 30px 20px;
+    font-size: 14px;
+    color: #bfc3d9;
+    line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- TÊN + MÃ (BẤM VÀO ĐÂY) -->
+<div class="name" onclick="handleNameClick()">
+V2508157 (NNguyễn Viết Dũng)
+</div>
+
+<!-- THẺ -->
+<div class="card">
+
+    <div class="card-header">
+        将二维码对准扫描器刷新出场
+    </div>
+
+    <div class="datetime" id="datetime"></div>
+
+    <div class="qr">
+        <img id="qrImage" src="qr.png">
+    </div>
+
+    <div class="refresh" onclick="changeQR()">
+        刷新二维码
+    </div>
+
+    <div class="timer" id="timer">00:00:00</div>
+
+</div>
+
+<div class="note">
+尊敬的员工您好，您已进入企业涉密区域，出于企业安全考虑，您的手机摄像头将被禁止拍摄，感谢您的配合。
+</div>
+
+<script>
+// ===== NGÀY GIỜ THỰC =====
+function updateDateTime() {
+    const now = new Date();
+    document.getElementById("datetime").innerText =
+        now.getFullYear() + "-" +
+        String(now.getMonth()+1).padStart(2,"0") + "-" +
+        String(now.getDate()).padStart(2,"0") + " " +
+        String(now.getHours()).padStart(2,"0") + ":" +
+        String(now.getMinutes()).padStart(2,"0") + ":" +
+        String(now.getSeconds()).padStart(2,"0");
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+// ===== TIMER CHẠY LIÊN TỤC =====
+let seconds = 0;
+
+setInterval(() => {
+    seconds++;
+    renderTimer();
+}, 1000);
+
+function renderTimer() {
+    const h = String(Math.floor(seconds / 3600)).padStart(2, '0');
+    const m = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+    const s = String(seconds % 60).padStart(2, '0');
+    document.getElementById("timer").innerText = `${h}:${m}:${s}`;
+}
+
+// ===== BẤM 3 LẦN MỚI NHẢY =====
+let clickCount = 0;
+let step = 0;
+
+const timeSteps = [
+    2 * 3600 + 30 * 60, // 02:30:00
+    5 * 3600,          // 05:00:00
+    8 * 3600,          // 08:00:00
+    0                  // 00:00:00
+];
+
+function handleNameClick() {
+    clickCount++;
+
+    if (clickCount === 3) {
+        seconds = timeSteps[step];
+        renderTimer();
+
+        step++;
+        if (step >= timeSteps.length) step = 0;
+
+        clickCount = 0;
+    }
+}
+
+// ===== ĐỔI QR =====
+let qrStatus = 1;
+function changeQR() {
+    const img = document.getElementById("qrImage");
+    img.src = qrStatus === 1 ? "qr2.png" : "qr.png";
+    qrStatus = qrStatus === 1 ? 2 : 1;
+}
+</script>
+
+</body>
+</html>
