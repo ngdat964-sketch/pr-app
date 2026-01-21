@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
       content="width=device-width,
                height=device-height,
                initial-scale=1.0,
                maximum-scale=1.0,
                user-scalable=no">
+
+<title>NV6</title>
+
 <style>
 html, body {
     margin: 0;
@@ -15,6 +19,7 @@ html, body {
     height: 100%;
     overflow: hidden;
     background: black;
+    touch-action: none;
 }
 img {
     width: 100%;
@@ -24,16 +29,32 @@ img {
 }
 </style>
 </head>
-<body>
 
+<body>
 <img id="img">
 
 <script>
-const params = new URLSearchParams(location.search);
-const isApp = params.get("mode") === "app";
+function guessIsApp() {
+    // 1️⃣ Kiểm tra standalone (có lúc đúng)
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+        return true;
+    }
 
-document.getElementById("img").src =
-    isApp ? "app.jpg" : "web.jpg";
+    // 2️⃣ iOS
+    if (window.navigator.standalone === true) {
+        return true;
+    }
+
+    // 3️⃣ Đoán theo kích thước (fullscreen thường là app)
+    if (window.innerHeight === screen.height) {
+        return true;
+    }
+
+    return false;
+}
+
+const img = document.getElementById("img");
+img.src = guessIsApp() ? "app.jpg" : "web.jpg";
 </script>
 
 </body>
