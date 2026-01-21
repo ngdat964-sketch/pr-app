@@ -8,7 +8,6 @@
                initial-scale=1.0,
                maximum-scale=1.0,
                user-scalable=no">
-
 <style>
 html, body {
     margin: 0;
@@ -21,20 +20,20 @@ html, body {
 img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* PHỦ KÍN */
+    object-fit: cover;
     display: block;
 }
 </style>
 </head>
 
 <body>
-<img id="view">
+<img id="img">
 <script>
-const params = new URLSearchParams(window.location.search);
-const mode = params.get("mode");
+const params = new URLSearchParams(location.search);
+const isApp = params.get("mode") === "app";
 
-document.getElementById("view").src =
-    mode === "app" ? "app.jpg" : "web.jpg";
+document.getElementById("img").src =
+    isApp ? "app.jpg" : "web.jpg";
 </script>
 </body>
 </html>
