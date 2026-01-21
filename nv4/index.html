@@ -16,21 +16,20 @@ body{
 
 /* TÊN */
 .name{
-    margin:26px 0 16px;
-    font-size:22px;
+    margin:24px 0 14px;
+    font-size:21px;
     font-weight:bold;
     color:#f0d58c;
-    cursor:pointer;
 }
 
 /* CARD */
 .card{
-    width:86%;
-    max-width:350px;
+    width:80%;
+    max-width:320px;
     margin:0 auto;
     background:#fff;
     border-radius:22px;
-    padding-bottom:26px;
+    padding-bottom:24px;
     color:#000;
     overflow:hidden;
 }
@@ -40,34 +39,28 @@ body{
     position:relative;
     background:#ffb703;
     color:#fff;
-    padding:14px 12px;
-    font-size:15px;
+    padding:13px 12px;
+    font-size:14px;
 }
 
-/* KHUYẾT THẬT */
+/* KHUYẾT */
 .card-header::before,
 .card-header::after{
     content:"";
     position:absolute;
-    bottom:-18px;
-    width:36px;
-    height:36px;
+    bottom:-7px;
+    width:14px;
+    height:14px;
     background:#2f3347;
     border-radius:50%;
 }
+.card-header::before{ left:-7px; }
+.card-header::after{ right:-7px; }
 
-.card-header::before{
-    left:-18px;
-}
-
-.card-header::after{
-    right:-18px;
-}
-
-/* NGÀY GIỜ */
+/* DATE */
 .datetime{
-    margin:28px 0 16px;
-    font-size:21px;
+    margin:24px 0 14px;
+    font-size:20px;
     font-weight:bold;
     white-space:nowrap;
 }
@@ -75,10 +68,9 @@ body{
 /* QR */
 .qr{
     margin:6px auto;
-    width:250px;
+    width:230px;
     position:relative;
 }
-
 .qr img{
     width:100%;
     transition:opacity .3s ease;
@@ -89,16 +81,15 @@ body{
     position:absolute;
     top:50%;
     left:50%;
-    width:32px;
-    height:32px;
-    margin:-16px;
-    border:3px solid rgba(0,0,0,.2);
+    width:30px;
+    height:30px;
+    margin:-15px;
+    border:3px solid rgba(0,0,0,.25);
     border-top-color:#ffb703;
     border-radius:50%;
     animation:spin .8s linear infinite;
     display:none;
 }
-
 @keyframes spin{
     to{transform:rotate(360deg);}
 }
@@ -108,32 +99,35 @@ body{
     margin-top:10px;
     color:#888;
     font-size:14px;
-    cursor:pointer;
 }
 
 /* TIMER */
 .timer{
     margin-top:8px;
-    font-size:25px;
+    font-size:24px;
     font-weight:bold;
     color:#2ecc71;
 }
 
 /* NOTE */
 .note{
-    margin:26px auto;
-    max-width:320px;
+    margin:24px auto;
+    max-width:300px;
     font-size:14px;
     color:#bfc3d9;
-    line-height:1.9;
+    line-height:1.85;
+    text-align:left;
+}
+.note .line{
+    display:block;
 }
 </style>
 </head>
 
 <body>
 
-<div class="name" onclick="handleNameClick()">
-V25101874 (Nguyễn Đức Anh)
+<div class="name">
+Phạm Văn Thống (V25082059)
 </div>
 
 <div class="card">
@@ -155,10 +149,11 @@ V25101874 (Nguyễn Đức Anh)
 
 </div>
 
+<!-- 🔴 CHỈ SỬA ĐÚNG PHẦN NÀY -->
 <div class="note">
-尊敬的员工您好，您已进入企业涉密区域，<br>
-出于企业安全考虑，您的手机摄像头将被禁止拍摄，<br>
-感谢您的配合。
+    <span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
+    <span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
+    <span class="line">感谢您的配合。</span>
 </div>
 
 <script>
@@ -199,8 +194,7 @@ const steps=[
     8*3600,
     0
 ];
-
-function handleNameClick(){
+document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
         seconds=steps[step];
@@ -208,14 +202,14 @@ function handleNameClick(){
         step=(step+1)%steps.length;
         clickCount=0;
     }
-}
+};
 
 // QR LOAD
 function refreshQR(){
     const img=document.getElementById("qrImage");
     const loading=document.getElementById("qrLoading");
 
-    img.style.opacity="0.35";
+    img.style.opacity="0.4";
     loading.style.display="block";
 
     setTimeout(()=>{
