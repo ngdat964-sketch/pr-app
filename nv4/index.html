@@ -2,7 +2,15 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 🔴 SỬA: CHẶN ZOOM iPHONE -->
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no,
+               viewport-fit=cover">
+
 <title>QR Access</title>
 
 <style>
@@ -12,6 +20,13 @@ body{
     font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
+}
+
+/* 🔴 THÊM: HẠN CHẾ DOUBLE-TAP / TEXT ZOOM */
+html, body{
+    touch-action: manipulation;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
 }
 
 /* TÊN */
@@ -149,7 +164,6 @@ Phạm Văn Thống (V25082059)
 
 </div>
 
-<!-- 🔴 CHỈ SỬA ĐÚNG PHẦN NÀY -->
 <div class="note">
     <span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
     <span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
@@ -218,6 +232,22 @@ function refreshQR(){
         loading.style.display="none";
     },600);
 }
+
+/* 🔴 THÊM: CHẶN PINCH ZOOM & DOUBLE TAP (iPhone) */
+document.addEventListener('touchmove', function(e){
+    if(e.scale && e.scale !== 1){
+        e.preventDefault();
+    }
+}, { passive:false });
+
+let lastTouchEnd=0;
+document.addEventListener('touchend', function(e){
+    const now=Date.now();
+    if(now-lastTouchEnd<=300){
+        e.preventDefault();
+    }
+    lastTouchEnd=now;
+}, false);
 </script>
 
 </body>
