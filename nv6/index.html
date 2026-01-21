@@ -2,12 +2,53 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta 
-  name="viewport" 
-  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>NV5</title>
+
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
+<title>NV6</title>
+
+<style>
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: black;
+    touch-action: none;      /* chặn zoom */
+}
+
+img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;     /* không zoom, không cắt */
+    user-select: none;
+}
+</style>
+
+<script>
+/* Nhận biết APP WebView */
+function isApp() {
+    return /wv|android|iphone|ipad/i.test(navigator.userAgent);
+}
+
+window.onload = function () {
+    const img = document.getElementById("view");
+
+    if (isApp()) {
+        img.src = "app.jpg";   // ảnh cho APP
+    } else {
+        img.src = "web.jpg";   // ảnh cho WEB
+    }
+};
+</script>
+
 </head>
-<body style="margin:0;overflow:hidden;background:black;">
-<img src="cam5.jpg" style="width:100vw;height:100vh;object-fit:contain;">
+<body>
+<img id="view" src="">
 </body>
 </html>
