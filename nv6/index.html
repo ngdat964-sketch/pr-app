@@ -5,31 +5,41 @@
 
 <meta name="viewport"
       content="width=device-width,
+               height=device-height,
                initial-scale=1,
                maximum-scale=1,
-               user-scalable=no">
+               user-scalable=no,
+               viewport-fit=cover">
 
 <title>NV6</title>
 
-<!-- CHỈ ĐỊNH ICON BẰNG LINK TUYỆT ĐỐI -->
-<link rel="apple-touch-icon" sizes="180x180"
-      href="https://ngdat964-sketch.github.io/pr-app/nv6/icon.png">
-
+<!-- iOS tự nhận apple-touch-icon.png -->
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <style>
 html, body {
   margin: 0;
+  padding: 0;
   width: 100%;
   height: 100%;
   background: black;
   overflow: hidden;
+
+  /* giảm tối đa hành vi zoom */
+  touch-action: none;
 }
 
 img {
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   object-fit: cover;
+
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 </style>
 </head>
