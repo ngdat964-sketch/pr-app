@@ -3,18 +3,15 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ✅ ICON APP iOS -->
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- ✅ FULLSCREEN iOS + CHẶN ZOOM -->
+<!-- FULLSCREEN iOS -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
                maximum-scale=1.0,
                user-scalable=no,
                viewport-fit=cover">
-
-<!-- 🔒 THÊM: ép chạy như app iOS, che thanh trắng + giờ -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -23,21 +20,28 @@
 <style>
 html,body{
     margin:0;
-    padding:0;
     width:100%;
     height:100%;
     background:#2f3347;
     font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
-
-    /* 🔒 THÊM: khóa zoom + full màn */
     touch-action:manipulation;
     overscroll-behavior:none;
     -webkit-text-size-adjust:100%;
 }
 
-/* TÊN */
+/* FULLSCREEN WRAP */
+.app{
+    position:fixed;
+    inset:0;
+    padding-top:env(safe-area-inset-top);
+    padding-bottom:env(safe-area-inset-bottom);
+    background:#2f3347;
+    overflow:hidden;
+}
+
+/* NAME */
 .name{
     margin:24px 0 14px;
     font-size:21px;
@@ -80,9 +84,22 @@ html,body{
 .card-header::before{ left:-7px; }
 .card-header::after{ right:-7px; }
 
-/* DATE */
+/* GREEN BLINK TEXT */
+.blink{
+    margin:10px 0 6px;
+    font-size:15px;
+    font-weight:bold;
+    color:#00ff66;
+    animation:blink 1.5s infinite;
+}
+@keyframes blink{
+    0%,50%,100%{opacity:1;}
+    25%,75%{opacity:0;}
+}
+
+/* DATETIME */
 .datetime{
-    margin:24px 0 14px;
+    margin:12px 0 14px;
     font-size:20px;
     font-weight:bold;
     white-space:nowrap;
@@ -106,9 +123,9 @@ html,body{
 /* TIMER */
 .timer{
     margin-top:8px;
-    font-size:26px;
+    font-size:24px;
     font-weight:bold;
-    color:#2ecc71; /* ✅ GIỮ ĐÚNG MÀU XANH ẢNH MẪU */
+    color:#2ecc71;
 }
 
 /* NOTE */
@@ -125,6 +142,7 @@ html,body{
 </head>
 
 <body>
+<div class="app">
 
 <div class="name">
 Nguyễn Anh Tuấn (V25092261)
@@ -136,6 +154,9 @@ Nguyễn Anh Tuấn (V25092261)
         将二维码对准扫描器刷新出场
     </div>
 
+    <!-- GREEN TEXT -->
+    <div class="blink">有效通行中</div>
+
     <div class="datetime" id="datetime"></div>
 
     <div class="qr">
@@ -144,7 +165,7 @@ Nguyễn Anh Tuấn (V25092261)
 
     <div class="refresh" onclick="refreshQR()">刷新二维码</div>
 
-    <!-- ✅ TIMER: KHỞI TẠO 00:00 -->
+    <!-- INITIAL 00:00 -->
     <div class="timer" id="timer">00:00</div>
 
 </div>
@@ -155,8 +176,10 @@ Nguyễn Anh Tuấn (V25092261)
     <span class="line">感谢您的配合。</span>
 </div>
 
+</div>
+
 <script>
-// DATE TIME (GIỮ NGUYÊN)
+// DATE TIME
 function updateDateTime(){
     const n=new Date();
     document.getElementById("datetime").innerText=
@@ -170,7 +193,7 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER (CHỈ ĐỔI FORMAT KHI < 1 GIỜ)
+// TIMER LOGIC GIỮ NGUYÊN
 let seconds=0;
 setInterval(()=>{
     seconds++;
@@ -178,27 +201,16 @@ setInterval(()=>{
 },1000);
 
 function renderTimer(){
-    if(seconds < 3600){
-        document.getElementById("timer").innerText =
-            String(Math.floor(seconds/60)).padStart(2,"0")+":"+
-            String(seconds%60).padStart(2,"0");
-    }else{
-        document.getElementById("timer").innerText =
-            String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-            String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-            String(seconds%60).padStart(2,"0");
-    }
+    document.getElementById("timer").innerText=
+        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
+        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
+        String(seconds%60).padStart(2,"0");
 }
 
-// CLICK 3 LẦN (GIỮ NGUYÊN)
+// CLICK 3 LẦN – GIỮ NGUYÊN
 let clickCount=0;
 let step=0;
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
+const steps=[9000,18000,28800,0];
 document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
@@ -209,16 +221,17 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
-// QR REFRESH (GIỮ NGUYÊN)
+// REFRESH QR
 function refreshQR(){
     const img=document.getElementById("qrImage");
     img.src="qr.png?t="+Date.now();
 }
 
-/* 🔒 THÊM: ép iPhone cuộn 1px để ẩn thanh trắng */
-window.addEventListener("load",()=>{
-    setTimeout(()=>window.scrollTo(0,1),50);
-});
+// BLOCK ZOOM iOS
+document.addEventListener('gesturestart',e=>e.preventDefault());
+document.addEventListener('touchmove',e=>{
+    if(e.scale && e.scale!==1) e.preventDefault();
+},{passive:false});
 </script>
 
 </body>
