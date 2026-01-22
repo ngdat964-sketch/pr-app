@@ -1,71 +1,44 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 
-<!-- ICON APP iOS -->
-<link rel="apple-touch-icon" href="icon.png">
+  <!-- BẮT BUỘC CHO iOS -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<!-- CHẶN ZOOM iPHONE -->
-<meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no,
-               viewport-fit=cover">
+  <!-- ICON ADD TO HOME (iOS CHỈ ĐỌC CÁI NÀY) -->
+  <link rel="apple-touch-icon" href="icon.png">
 
-<title>NV6</title>
+  <!-- ICON CHO TRÌNH DUYỆT KHÁC -->
+  <link rel="icon" type="image/png" href="icon.png">
 
-<style>
-/* RESET */
-html, body{
-    margin:0;
-    padding:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
+  <title>NV7</title>
 
-    /* chống zoom */
-    touch-action: manipulation;
-    overscroll-behavior: none;
-    -webkit-text-size-adjust: 100%;
-}
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+      touch-action: manipulation;
+    }
 
-/* ẢNH FULL MÀN */
-img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    display:block;
-    user-select:none;
-    -webkit-user-drag:none;
-}
-</style>
+    img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+  </style>
 </head>
 
 <body>
-
-<img src="image.png" alt="">
-
-<script>
-/* CHẶN PINCH ZOOM */
-document.addEventListener('touchmove', function(e){
-    if (e.scale && e.scale !== 1) {
-        e.preventDefault();
-    }
-}, { passive:false });
-
-/* CHẶN DOUBLE TAP */
-let lastTouchEnd = 0;
-document.addEventListener('touchend', function(e){
-    const now = Date.now();
-    if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-    }
-    lastTouchEnd = now;
-}, false);
-</script>
-
+  <img src="image.png" alt="NV7 Image">
 </body>
 </html>
