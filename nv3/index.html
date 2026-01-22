@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 
+<!-- ICON APP iOS -->
 <link rel="apple-touch-icon" href="icon.png">
 
+<!-- CHẶN ZOOM + SAFE AREA -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
@@ -12,6 +14,7 @@
                user-scalable=no,
                viewport-fit=cover">
 
+<!-- ✅ CHE STATUS BAR iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -26,11 +29,22 @@ body{
     color:#fff;
 }
 
-/* CHẶN ZOOM */
+/* CHẶN DOUBLE TAP / ZOOM */
 html, body{
     touch-action: manipulation;
     overscroll-behavior: none;
     -webkit-text-size-adjust: 100%;
+}
+
+/* CHE PHẦN TRẮNG IOS */
+.safe-cover{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    height:env(safe-area-inset-top);
+    background:#2f3347;
+    z-index:9999;
 }
 
 /* TÊN */
@@ -62,23 +76,26 @@ html, body{
     font-size:14px;
 }
 
+/* KHUYẾT */
+.card-header::before,
+.card-header::after{
+    content:"";
+    position:absolute;
+    bottom:-7px;
+    width:14px;
+    height:14px;
+    background:#2f3347;
+    border-radius:50%;
+}
+.card-header::before{ left:-7px; }
+.card-header::after{ right:-7px; }
+
 /* DATE */
 .datetime{
-    margin:24px 0 10px;
+    margin:24px 0 14px;
     font-size:20px;
     font-weight:bold;
-}
-
-/* 🔵 DÒNG CHỮ XANH */
-.blink-text{
-    font-size:14px;
-    color:#1e90ff;
-    margin-bottom:8px;
-    animation:blink 1.5s infinite;
-}
-@keyframes blink{
-    0%,50%,100%{opacity:1;}
-    25%,75%{opacity:0;}
+    white-space:nowrap;
 }
 
 /* QR */
@@ -87,7 +104,28 @@ html, body{
     width:230px;
     position:relative;
 }
-.qr img{ width:100%; }
+.qr img{
+    width:100%;
+    transition:opacity .3s ease;
+}
+
+/* LOADING */
+.qr-loading{
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:30px;
+    height:30px;
+    margin:-15px;
+    border:3px solid rgba(0,0,0,.25);
+    border-top-color:#ffb703;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    display:none;
+}
+@keyframes spin{
+    to{transform:rotate(360deg);}
+}
 
 /* REFRESH */
 .refresh{
@@ -113,21 +151,15 @@ html, body{
     line-height:1.85;
     text-align:left;
 }
-.note .line{ display:block; }
-
-/* CHE STATUS BAR iOS */
-.safe-cover{
-    position:fixed;
-    top:0;left:0;right:0;
-    height:env(safe-area-inset-top);
-    background:#2f3347;
-    z-index:9999;
+.note .line{
+    display:block;
 }
 </style>
 </head>
 
 <body>
 
+<!-- CHE STATUS BAR -->
 <div class="safe-cover"></div>
 
 <div class="name">
@@ -142,17 +174,14 @@ Nguyễn Anh Tuấn (V25092261)
 
     <div class="datetime" id="datetime"></div>
 
-    <!-- CHỮ XANH -->
-    <div class="blink-text">Access Valid</div>
-
     <div class="qr">
         <img id="qrImage" src="qr.png">
+        <div class="qr-loading" id="qrLoading"></div>
     </div>
 
     <div class="refresh" onclick="refreshQR()">刷新二维码</div>
 
-    <!-- HIỂN THỊ 00:00 -->
-    <div class="timer" id="timer">00:00</div>
+    <div class="timer" id="timer">00:00:00</div>
 
 </div>
 
@@ -177,7 +206,7 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER LOGIC GIỮ NGUYÊN
+// TIMER
 let seconds=0;
 setInterval(()=>{
     seconds++;
@@ -185,15 +214,21 @@ setInterval(()=>{
 },1000);
 
 function renderTimer(){
-    const mm=String(Math.floor((seconds%3600)/60)).padStart(2,"0");
-    const ss=String(seconds%60).padStart(2,"0");
-    document.getElementById("timer").innerText=mm+":"+ss;
+    document.getElementById("timer").innerText=
+        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
+        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
+        String(seconds%60).padStart(2,"0");
 }
 
-// CLICK 3 LẦN – GIỮ NGUYÊN
+// CLICK 3 LẦN
 let clickCount=0;
 let step=0;
-const steps=[9000,18000,28800,0]; // 02:30:00 / 05:00:00 / 08:00:00
+const steps=[
+    2*3600+30*60,
+    5*3600,
+    8*3600,
+    0
+];
 document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
@@ -204,15 +239,36 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
-// QR
+// QR LOAD
 function refreshQR(){
-    document.getElementById("qrImage").src="qr.png?t="+Date.now();
+    const img=document.getElementById("qrImage");
+    const loading=document.getElementById("qrLoading");
+
+    img.style.opacity="0.4";
+    loading.style.display="block";
+
+    setTimeout(()=>{
+        img.src="qr.png?t="+Date.now();
+        img.style.opacity="1";
+        loading.style.display="none";
+    },600);
 }
 
-// CHẶN ZOOM iOS
-document.addEventListener('touchmove',e=>{
-    if(e.scale && e.scale!==1) e.preventDefault();
-},{passive:false});
+/* CHẶN PINCH ZOOM */
+document.addEventListener('touchmove', function(e){
+    if(e.scale && e.scale !== 1){
+        e.preventDefault();
+    }
+}, { passive:false });
+
+let lastTouchEnd=0;
+document.addEventListener('touchend', function(e){
+    const now=Date.now();
+    if(now-lastTouchEnd<=300){
+        e.preventDefault();
+    }
+    lastTouchEnd=now;
+}, false);
 </script>
 
 </body>
