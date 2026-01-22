@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 
+<!-- ✅ ICON APP iOS -->
+<link rel="apple-touch-icon" href="icon.png">
+
+<!-- ✅ FULLSCREEN iOS + CHẶN ZOOM -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
@@ -10,6 +14,7 @@
                user-scalable=no,
                viewport-fit=cover">
 
+<!-- 🔒 THÊM: ép chạy như app iOS, che thanh trắng + giờ -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -22,107 +27,150 @@ html,body{
     width:100%;
     height:100%;
     background:#2f3347;
-    font-family:Arial,Helvetica,sans-serif;
+    font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
-    overflow:hidden;
+
+    /* 🔒 THÊM: khóa zoom + full màn */
     touch-action:manipulation;
+    overscroll-behavior:none;
     -webkit-text-size-adjust:100%;
 }
 
+/* TÊN */
 .name{
-    margin:22px 0 14px;
-    font-size:18px;
+    margin:24px 0 14px;
+    font-size:21px;
+    font-weight:bold;
     color:#f0d58c;
 }
 
+/* CARD */
 .card{
-    width:82%;
-    max-width:330px;
+    width:80%;
+    max-width:320px;
     margin:0 auto;
     background:#fff;
     border-radius:22px;
     padding-bottom:24px;
     color:#000;
-    position:relative;
+    overflow:hidden;
 }
 
-.header{
+/* HEADER */
+.card-header{
+    position:relative;
     background:#ffb703;
     color:#fff;
-    padding:12px;
+    padding:13px 12px;
     font-size:14px;
-    border-top-left-radius:22px;
-    border-top-right-radius:22px;
 }
 
-.blink{
-    margin-top:10px;
-    font-size:15px;
-    color:#2ecc71;
-    animation:blink 1.5s infinite;
+/* KHUYẾT */
+.card-header::before,
+.card-header::after{
+    content:"";
+    position:absolute;
+    bottom:-7px;
+    width:14px;
+    height:14px;
+    background:#2f3347;
+    border-radius:50%;
 }
+.card-header::before{ left:-7px; }
+.card-header::after{ right:-7px; }
 
-@keyframes blink{
-    0%,50%,100%{opacity:1;}
-    25%,75%{opacity:0;}
-}
-
+/* DATE */
 .datetime{
-    margin:8px 0;
-    font-size:18px;
+    margin:24px 0 14px;
+    font-size:20px;
     font-weight:bold;
+    white-space:nowrap;
 }
 
+/* QR */
 .qr{
-    margin:10px auto;
-    width:220px;
+    margin:6px auto;
+    width:230px;
+    position:relative;
+}
+.qr img{ width:100%; }
+
+/* REFRESH */
+.refresh{
+    margin-top:10px;
+    color:#888;
+    font-size:14px;
 }
 
-.qr img{
-    width:100%;
-}
-
+/* TIMER */
 .timer{
     margin-top:8px;
-    font-size:24px;
+    font-size:26px;
     font-weight:bold;
-    color:#2ecc71;
+    color:#2ecc71; /* ✅ GIỮ ĐÚNG MÀU XANH ẢNH MẪU */
 }
+
+/* NOTE */
+.note{
+    margin:24px auto;
+    max-width:300px;
+    font-size:14px;
+    color:#bfc3d9;
+    line-height:1.85;
+    text-align:left;
+}
+.note .line{ display:block; }
 </style>
 </head>
 
 <body>
 
-<div class="name" id="name">
-Mã NV V25092218
+<div class="name">
+Nguyễn Anh Tuấn (V25092261)
 </div>
 
 <div class="card">
-    <div class="header">将二维码对准扫描器刷新出场</div>
-    <div class="blink">已生效</div>
-    <div class="datetime" id="datetime"></div>
-    <div class="qr">
-        <img src="qr.png">
+
+    <div class="card-header">
+        将二维码对准扫描器刷新出场
     </div>
-    <div class="timer" id="timer">00:00:00</div>
+
+    <div class="datetime" id="datetime"></div>
+
+    <div class="qr">
+        <img id="qrImage" src="qr.png">
+    </div>
+
+    <div class="refresh" onclick="refreshQR()">刷新二维码</div>
+
+    <!-- ✅ TIMER: KHỞI TẠO 00:00 -->
+    <div class="timer" id="timer">00:00</div>
+
+</div>
+
+<div class="note">
+    <span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
+    <span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
+    <span class="line">感谢您的配合。</span>
 </div>
 
 <script>
-// datetime
-function updateDate(){
-    const d=new Date();
+// DATE TIME (GIỮ NGUYÊN)
+function updateDateTime(){
+    const n=new Date();
     document.getElementById("datetime").innerText=
-        d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+
-        String(d.getDate()).padStart(2,"0")+" "+
-        String(d.getHours()).padStart(2,"0")+":"+
-        String(d.getMinutes()).padStart(2,"0")+":"+
-        String(d.getSeconds()).padStart(2,"0");
+        n.getFullYear()+"-"+
+        String(n.getMonth()+1).padStart(2,"0")+"-"+
+        String(n.getDate()).padStart(2,"0")+" "+
+        String(n.getHours()).padStart(2,"0")+":"+
+        String(n.getMinutes()).padStart(2,"0")+":"+
+        String(n.getSeconds()).padStart(2,"0");
 }
-setInterval(updateDate,1000);
-updateDate();
+setInterval(updateDateTime,1000);
+updateDateTime();
 
-// timer
+// TIMER (CHỈ ĐỔI FORMAT KHI < 1 GIỜ)
 let seconds=0;
 setInterval(()=>{
     seconds++;
@@ -130,36 +178,46 @@ setInterval(()=>{
 },1000);
 
 function renderTimer(){
-    document.getElementById("timer").innerText=
-        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-        String(seconds%60).padStart(2,"0");
+    if(seconds < 3600){
+        document.getElementById("timer").innerText =
+            String(Math.floor(seconds/60)).padStart(2,"0")+":"+
+            String(seconds%60).padStart(2,"0");
+    }else{
+        document.getElementById("timer").innerText =
+            String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
+            String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
+            String(seconds%60).padStart(2,"0");
+    }
 }
 
-// click 3 lần
-let click=0, step=0;
-const steps=[2*3600+30*60,5*3600,8*3600];
-
-document.getElementById("name").onclick=()=>{
-    click++;
-    if(click===3){
+// CLICK 3 LẦN (GIỮ NGUYÊN)
+let clickCount=0;
+let step=0;
+const steps=[
+    2*3600+30*60,
+    5*3600,
+    8*3600,
+    0
+];
+document.querySelector(".name").onclick=()=>{
+    clickCount++;
+    if(clickCount===3){
         seconds=steps[step];
         renderTimer();
         step=(step+1)%steps.length;
-        click=0;
+        clickCount=0;
     }
 };
 
-// chặn zoom
-document.addEventListener("touchmove",e=>{
-    if(e.scale && e.scale!==1) e.preventDefault();
-},{passive:false});
+// QR REFRESH (GIỮ NGUYÊN)
+function refreshQR(){
+    const img=document.getElementById("qrImage");
+    img.src="qr.png?t="+Date.now();
+}
 
-let last=0;
-document.addEventListener("touchend",e=>{
-    const now=Date.now();
-    if(now-last<300) e.preventDefault();
-    last=now;
+/* 🔒 THÊM: ép iPhone cuộn 1px để ẩn thanh trắng */
+window.addEventListener("load",()=>{
+    setTimeout(()=>window.scrollTo(0,1),50);
 });
 </script>
 
