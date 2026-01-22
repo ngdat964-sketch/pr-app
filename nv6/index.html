@@ -12,11 +12,13 @@
 
 <title>NV6 Image</title>
 
-<!-- ICON cho iPhone -->
-<link rel="apple-touch-icon" href="icon.png">
+<!-- iOS: ICON + CHẾ ĐỘ WEB APP -->
+<link rel="apple-touch-icon" sizes="180x180" href="./icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-<!-- MANIFEST cho Android -->
-<link rel="manifest" href="manifest.json">
+<!-- Android: MANIFEST -->
+<link rel="manifest" href="./manifest.json">
 
 <style>
 html, body {
@@ -31,7 +33,7 @@ html, body {
 img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover;   /* phủ kín màn hình */
     display: block;
 }
 </style>
