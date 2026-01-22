@@ -3,10 +3,6 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- iOS FULLSCREEN -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
 <link rel="apple-touch-icon" href="icon.png">
 
 <meta name="viewport"
@@ -16,25 +12,25 @@
                user-scalable=no,
                viewport-fit=cover">
 
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <title>QR Access</title>
 
 <style>
-html,body{
+body{
     margin:0;
-    padding:0;
-    height:100%;
     background:#2f3347;
     font-family:Arial,sans-serif;
-    color:#fff;
     text-align:center;
-    overscroll-behavior:none;
-    touch-action:manipulation;
-    -webkit-text-size-adjust:100%;
+    color:#fff;
 }
 
-/* che status bar iOS */
-body{
-    padding-top:env(safe-area-inset-top);
+/* CHẶN ZOOM */
+html, body{
+    touch-action: manipulation;
+    overscroll-behavior: none;
+    -webkit-text-size-adjust: 100%;
 }
 
 /* TÊN */
@@ -66,38 +62,23 @@ body{
     font-size:14px;
 }
 
-/* KHUYẾT */
-.card-header::before,
-.card-header::after{
-    content:"";
-    position:absolute;
-    bottom:-7px;
-    width:14px;
-    height:14px;
-    background:#2f3347;
-    border-radius:50%;
-}
-.card-header::before{left:-7px;}
-.card-header::after{right:-7px;}
-
 /* DATE */
 .datetime{
     margin:24px 0 10px;
     font-size:20px;
     font-weight:bold;
-    white-space:nowrap;
 }
 
-/* DÒNG XANH NHẤP NHÁY */
-.blink-line{
+/* 🔵 DÒNG CHỮ XANH */
+.blink-text{
     font-size:14px;
-    color:#2eccff;
-    margin-bottom:6px;
+    color:#1e90ff;
+    margin-bottom:8px;
     animation:blink 1.5s infinite;
 }
 @keyframes blink{
-    0%,50%,100%{opacity:1}
-    25%,75%{opacity:0}
+    0%,50%,100%{opacity:1;}
+    25%,75%{opacity:0;}
 }
 
 /* QR */
@@ -106,7 +87,14 @@ body{
     width:230px;
     position:relative;
 }
-.qr img{width:100%}
+.qr img{ width:100%; }
+
+/* REFRESH */
+.refresh{
+    margin-top:10px;
+    color:#888;
+    font-size:14px;
+}
 
 /* TIMER */
 .timer{
@@ -125,13 +113,26 @@ body{
     line-height:1.85;
     text-align:left;
 }
-.note .line{display:block;}
+.note .line{ display:block; }
+
+/* CHE STATUS BAR iOS */
+.safe-cover{
+    position:fixed;
+    top:0;left:0;right:0;
+    height:env(safe-area-inset-top);
+    background:#2f3347;
+    z-index:9999;
+}
 </style>
 </head>
 
 <body>
 
-<div class="name">Nguyễn Anh Tuấn (V25092261)</div>
+<div class="safe-cover"></div>
+
+<div class="name">
+Nguyễn Anh Tuấn (V25092261)
+</div>
 
 <div class="card">
 
@@ -141,14 +142,18 @@ body{
 
     <div class="datetime" id="datetime"></div>
 
-    <!-- DÒNG XANH -->
-    <div class="blink-line">请勿截屏或录像</div>
+    <!-- CHỮ XANH -->
+    <div class="blink-text">Access Valid</div>
 
     <div class="qr">
         <img id="qrImage" src="qr.png">
     </div>
 
+    <div class="refresh" onclick="refreshQR()">刷新二维码</div>
+
+    <!-- HIỂN THỊ 00:00 -->
     <div class="timer" id="timer">00:00</div>
+
 </div>
 
 <div class="note">
@@ -180,22 +185,15 @@ setInterval(()=>{
 },1000);
 
 function renderTimer(){
-    if(seconds < 3600){
-        document.getElementById("timer").innerText =
-            String(Math.floor(seconds/60)).padStart(2,"0")+":"+
-            String(seconds%60).padStart(2,"0");
-    }else{
-        document.getElementById("timer").innerText =
-            String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-            String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-            String(seconds%60).padStart(2,"0");
-    }
+    const mm=String(Math.floor((seconds%3600)/60)).padStart(2,"0");
+    const ss=String(seconds%60).padStart(2,"0");
+    document.getElementById("timer").innerText=mm+":"+ss;
 }
 
 // CLICK 3 LẦN – GIỮ NGUYÊN
 let clickCount=0;
 let step=0;
-const steps=[2*3600+30*60,5*3600,8*3600,0];
+const steps=[9000,18000,28800,0]; // 02:30:00 / 05:00:00 / 08:00:00
 document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
@@ -206,17 +204,15 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
+// QR
+function refreshQR(){
+    document.getElementById("qrImage").src="qr.png?t="+Date.now();
+}
+
 // CHẶN ZOOM iOS
 document.addEventListener('touchmove',e=>{
     if(e.scale && e.scale!==1) e.preventDefault();
 },{passive:false});
-
-let last=0;
-document.addEventListener('touchend',e=>{
-    let now=Date.now();
-    if(now-last<=300) e.preventDefault();
-    last=now;
-},false);
 </script>
 
 </body>
