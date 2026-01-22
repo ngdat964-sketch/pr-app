@@ -3,10 +3,13 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ✅ ICON APP iOS (FIX LỖI HIỆN CHỮ Q) -->
+<!-- iOS APP MODE -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QR Access">
+
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- ✅ CHẶN ZOOM iPHONE -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
@@ -17,19 +20,13 @@
 <title>QR Access</title>
 
 <style>
-body{
+html,body{
     margin:0;
     background:#2f3347;
     font-family:Arial,sans-serif;
-    text-align:center;
     color:#fff;
-}
-
-/* ✅ HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
-html, body{
-    touch-action: manipulation;
-    overscroll-behavior: none;
-    -webkit-text-size-adjust: 100%;
+    text-align:center;
+    height:100%;
 }
 
 /* TÊN */
@@ -49,82 +46,67 @@ html, body{
     border-radius:22px;
     padding-bottom:24px;
     color:#000;
-    overflow:hidden;
 }
 
 /* HEADER */
 .card-header{
-    position:relative;
     background:#ffb703;
     color:#fff;
     padding:13px 12px;
     font-size:14px;
+    border-radius:22px 22px 0 0;
 }
-
-/* KHUYẾT */
-.card-header::before,
-.card-header::after{
-    content:"";
-    position:absolute;
-    bottom:-7px;
-    width:14px;
-    height:14px;
-    background:#2f3347;
-    border-radius:50%;
-}
-.card-header::before{ left:-7px; }
-.card-header::after{ right:-7px; }
 
 /* DATE */
 .datetime{
-    margin:24px 0 14px;
-    font-size:20px;
+    margin:18px 0 10px;
+    font-size:18px;
     font-weight:bold;
-    white-space:nowrap;
+}
+
+/* === KHUNG PHỦ QR + TIMER === */
+.qr-box{
+    margin:0 auto;
+    width:260px;
+    background:#fff;
+    border-radius:18px;
+    padding:16px 12px 14px;
 }
 
 /* QR */
 .qr{
-    margin:6px auto;
     width:230px;
-    position:relative;
+    margin:0 auto;
 }
-.qr img{
-    width:100%;
-    transition:opacity .3s ease;
+.qr img{ width:100%; }
+
+/* DÒNG XANH NHẤP NHÁY */
+.status{
+    margin-top:10px;
+    font-size:18px;
+    font-weight:bold;
+    color:#2ecc71;
+    animation:blink 1.5s infinite;
+}
+@keyframes blink{
+    0%{opacity:1}
+    50%{opacity:0}
+    100%{opacity:1}
 }
 
-/* LOADING */
-.qr-loading{
-    position:absolute;
-    top:50%;
-    left:50%;
-    width:30px;
-    height:30px;
-    margin:-15px;
-    border:3px solid rgba(0,0,0,.25);
-    border-top-color:#ffb703;
-    border-radius:50%;
-    animation:spin .8s linear infinite;
-    display:none;
-}
-@keyframes spin{
-    to{transform:rotate(360deg);}
+/* TIMER */
+.timer{
+    margin-top:6px;
+    font-size:22px;
+    font-weight:bold;
+    color:#2ecc71;
 }
 
 /* REFRESH */
 .refresh{
     margin-top:10px;
-    color:#888;
     font-size:14px;
-}
-
-/* TIMER */
-.timer{
-    margin-top:8px;
-    font-size:24px;
-    font-weight:bold;
-    color:#2ecc71;
+    color:#888;
 }
 
 /* NOTE */
@@ -133,48 +115,46 @@ html, body{
     max-width:300px;
     font-size:14px;
     color:#bfc3d9;
-    line-height:1.85;
+    line-height:1.8;
     text-align:left;
-}
-.note .line{
-    display:block;
 }
 </style>
 </head>
 
 <body>
 
-<div class="name">
-Nguyễn Anh Tuấn (V25092261)
-</div>
+<div class="name">Nguyễn Anh Tuấn (V25092261)</div>
 
 <div class="card">
-
     <div class="card-header">
         将二维码对准扫描器刷新出场
     </div>
 
     <div class="datetime" id="datetime"></div>
 
-    <div class="qr">
-        <img id="qrImage" src="qr.png">
-        <div class="qr-loading" id="qrLoading"></div>
+    <div class="qr-box">
+        <div class="qr">
+            <img id="qrImage" src="qr.png">
+        </div>
+
+        <!-- DÒNG XANH -->
+        <div class="status">已生效</div>
+
+        <!-- TIMER -->
+        <div class="timer" id="timer">00:00</div>
     </div>
 
     <div class="refresh" onclick="refreshQR()">刷新二维码</div>
-
-    <div class="timer" id="timer">00:00:00</div>
-
 </div>
 
 <div class="note">
-    <span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
-    <span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
-    <span class="line">感谢您的配合。</span>
+    <span>尊敬的员工您好，您已进入企业涉密区域，</span><br>
+    <span>出于企业安全考虑，您的手机摄像头将被禁止，</span><br>
+    <span>感谢您的配合。</span>
 </div>
 
 <script>
-// DATE TIME
+// DATETIME
 function updateDateTime(){
     const n=new Date();
     document.getElementById("datetime").innerText=
@@ -188,7 +168,7 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER
+// TIMER LOGIC (KHÔNG ĐỔI)
 let seconds=0;
 setInterval(()=>{
     seconds++;
@@ -196,61 +176,17 @@ setInterval(()=>{
 },1000);
 
 function renderTimer(){
+    const m=Math.floor(seconds/60);
+    const s=seconds%60;
     document.getElementById("timer").innerText=
-        String(Math.floor(seconds/3600)).padStart(2,"0")+":"+
-        String(Math.floor((seconds%3600)/60)).padStart(2,"0")+":"+
-        String(seconds%60).padStart(2,"0");
+        String(m).padStart(2,"0")+":"+
+        String(s).padStart(2,"0");
 }
 
-// CLICK 3 LẦN
-let clickCount=0;
-let step=0;
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
-document.querySelector(".name").onclick=()=>{
-    clickCount++;
-    if(clickCount===3){
-        seconds=steps[step];
-        renderTimer();
-        step=(step+1)%steps.length;
-        clickCount=0;
-    }
-};
-
-// QR LOAD
+// QR REFRESH
 function refreshQR(){
-    const img=document.getElementById("qrImage");
-    const loading=document.getElementById("qrLoading");
-
-    img.style.opacity="0.4";
-    loading.style.display="block";
-
-    setTimeout(()=>{
-        img.src="qr.png?t="+Date.now();
-        img.style.opacity="1";
-        loading.style.display="none";
-    },600);
+    document.getElementById("qrImage").src="qr.png?t="+Date.now();
 }
-
-/* ✅ CHẶN PINCH ZOOM & DOUBLE TAP (iPhone) */
-document.addEventListener('touchmove', function(e){
-    if(e.scale && e.scale !== 1){
-        e.preventDefault();
-    }
-}, { passive:false });
-
-let lastTouchEnd=0;
-document.addEventListener('touchend', function(e){
-    const now=Date.now();
-    if(now-lastTouchEnd<=300){
-        e.preventDefault();
-    }
-    lastTouchEnd=now;
-}, false);
 </script>
 
 </body>
