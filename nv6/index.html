@@ -6,28 +6,34 @@
 <meta name="viewport"
       content="width=device-width,
                height=device-height,
-               initial-scale=1.0,
-               maximum-scale=1.0,
+               initial-scale=1,
+               maximum-scale=1,
                user-scalable=no,
                viewport-fit=cover">
 
 <title>NV6</title>
 
-<!-- ICON iOS -->
-<link rel="apple-touch-icon" href="icon.png">
+<!-- FIX ICON iOS: BẮT BUỘC DÙNG LINK TUYỆT ĐỐI -->
+<link rel="apple-touch-icon" sizes="180x180"
+      href="https://ngdat964-sketch.github.io/pr-app/nv6/icon.png">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 <style>
-html, body {
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
   width: 100%;
   height: 100%;
   background: black;
   overflow: hidden;
 
-  /* CHỐNG ZOOM iOS */
+  /* chặn zoom iOS */
   touch-action: none;
   overscroll-behavior: none;
 }
@@ -39,7 +45,7 @@ img {
   width: 100vw;
   height: 100vh;
 
-  object-fit: cover;   /* PHỦ KÍN MÀN HÌNH */
+  object-fit: cover;     /* phủ kín màn hình */
   object-position: center;
 
   user-select: none;
@@ -50,6 +56,7 @@ img {
 </head>
 
 <body>
+  <!-- ẢNH HIỂN THỊ TRONG WEB -->
   <img src="image.jpg" alt="">
 </body>
 </html>
