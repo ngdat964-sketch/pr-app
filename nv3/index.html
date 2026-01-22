@@ -3,25 +3,26 @@
 <head>
 <meta charset="UTF-8">
 
+<!-- ✅ iOS PWA – CHE THANH TRẮNG / THỜI GIAN -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QR Access">
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- FULLSCREEN iOS -->
+<!-- ✅ CHẶN ZOOM iPHONE -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
                maximum-scale=1.0,
                user-scalable=no,
                viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <title>QR Access</title>
 
 <style>
 html,body{
     margin:0;
-    width:100%;
-    height:100%;
+    padding:0;
     background:#2f3347;
     font-family:Arial,sans-serif;
     text-align:center;
@@ -29,19 +30,10 @@ html,body{
     touch-action:manipulation;
     overscroll-behavior:none;
     -webkit-text-size-adjust:100%;
+    min-height:100vh;
 }
 
-/* FULLSCREEN WRAP */
-.app{
-    position:fixed;
-    inset:0;
-    padding-top:env(safe-area-inset-top);
-    padding-bottom:env(safe-area-inset-bottom);
-    background:#2f3347;
-    overflow:hidden;
-}
-
-/* NAME */
+/* TÊN */
 .name{
     margin:24px 0 14px;
     font-size:21px;
@@ -84,22 +76,9 @@ html,body{
 .card-header::before{ left:-7px; }
 .card-header::after{ right:-7px; }
 
-/* GREEN BLINK TEXT */
-.blink{
-    margin:10px 0 6px;
-    font-size:15px;
-    font-weight:bold;
-    color:#00ff66;
-    animation:blink 1.5s infinite;
-}
-@keyframes blink{
-    0%,50%,100%{opacity:1;}
-    25%,75%{opacity:0;}
-}
-
-/* DATETIME */
+/* DATE */
 .datetime{
-    margin:12px 0 14px;
+    margin:24px 0 14px;
     font-size:20px;
     font-weight:bold;
     white-space:nowrap;
@@ -120,9 +99,17 @@ html,body{
     font-size:14px;
 }
 
+/* ✅ DÒNG CHỮ XANH (ĐÚNG VỊ TRÍ ẢNH MẪU) */
+.status{
+    margin-top:10px;
+    font-size:16px;
+    font-weight:bold;
+    color:#2ecc71;
+}
+
 /* TIMER */
 .timer{
-    margin-top:8px;
+    margin-top:4px;
     font-size:24px;
     font-weight:bold;
     color:#2ecc71;
@@ -142,7 +129,6 @@ html,body{
 </head>
 
 <body>
-<div class="app">
 
 <div class="name">
 Nguyễn Anh Tuấn (V25092261)
@@ -154,9 +140,6 @@ Nguyễn Anh Tuấn (V25092261)
         将二维码对准扫描器刷新出场
     </div>
 
-    <!-- GREEN TEXT -->
-    <div class="blink">有效通行中</div>
-
     <div class="datetime" id="datetime"></div>
 
     <div class="qr">
@@ -165,7 +148,10 @@ Nguyễn Anh Tuấn (V25092261)
 
     <div class="refresh" onclick="refreshQR()">刷新二维码</div>
 
-    <!-- INITIAL 00:00 -->
+    <!-- ✅ DÒNG XANH -->
+    <div class="status">已生效</div>
+
+    <!-- ✅ THỜI GIAN BAN ĐẦU 00:00 -->
     <div class="timer" id="timer">00:00</div>
 
 </div>
@@ -174,8 +160,6 @@ Nguyễn Anh Tuấn (V25092261)
     <span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
     <span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
     <span class="line">感谢您的配合。</span>
-</div>
-
 </div>
 
 <script>
@@ -193,7 +177,7 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER LOGIC GIỮ NGUYÊN
+// TIMER – GIỮ NGUYÊN LOGIC
 let seconds=0;
 setInterval(()=>{
     seconds++;
@@ -210,7 +194,12 @@ function renderTimer(){
 // CLICK 3 LẦN – GIỮ NGUYÊN
 let clickCount=0;
 let step=0;
-const steps=[9000,18000,28800,0];
+const steps=[
+    2*3600+30*60,
+    5*3600,
+    8*3600,
+    0
+];
 document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
@@ -221,17 +210,21 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
-// REFRESH QR
 function refreshQR(){
-    const img=document.getElementById("qrImage");
-    img.src="qr.png?t="+Date.now();
+    document.getElementById("qrImage").src="qr.png?t="+Date.now();
 }
 
-// BLOCK ZOOM iOS
-document.addEventListener('gesturestart',e=>e.preventDefault());
+/* CHẶN PINCH + DOUBLE TAP */
 document.addEventListener('touchmove',e=>{
     if(e.scale && e.scale!==1) e.preventDefault();
 },{passive:false});
+
+let lastTouchEnd=0;
+document.addEventListener('touchend',e=>{
+    const now=Date.now();
+    if(now-lastTouchEnd<=300) e.preventDefault();
+    lastTouchEnd=now;
+},false);
 </script>
 
 </body>
