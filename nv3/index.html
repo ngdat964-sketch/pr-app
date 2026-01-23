@@ -3,20 +3,16 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ICON APP iOS -->
+<!-- ✅ ICON APP iOS (FIX LỖI HIỆN CHỮ Q) -->
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- CHẶN ZOOM + SAFE AREA -->
+<!-- ✅ CHẶN ZOOM iPHONE -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
                maximum-scale=1.0,
                user-scalable=no,
                viewport-fit=cover">
-
-<!-- ✅ CHE STATUS BAR iOS -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <title>QR Access</title>
 
@@ -29,22 +25,11 @@ body{
     color:#fff;
 }
 
-/* CHẶN DOUBLE TAP / ZOOM */
+/* ✅ HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
 html, body{
     touch-action: manipulation;
     overscroll-behavior: none;
     -webkit-text-size-adjust: 100%;
-}
-
-/* CHE PHẦN TRẮNG IOS */
-.safe-cover{
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    height:env(safe-area-inset-top);
-    background:#2f3347;
-    z-index:9999;
 }
 
 /* TÊN */
@@ -159,9 +144,6 @@ html, body{
 
 <body>
 
-<!-- CHE STATUS BAR -->
-<div class="safe-cover"></div>
-
 <div class="name">
 Nguyễn Anh Tuấn (V25092261)
 </div>
@@ -254,7 +236,7 @@ function refreshQR(){
     },600);
 }
 
-/* CHẶN PINCH ZOOM */
+/* ✅ CHẶN PINCH ZOOM & DOUBLE TAP (iPhone) */
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
