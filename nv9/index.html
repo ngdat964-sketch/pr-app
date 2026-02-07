@@ -23,6 +23,7 @@ body{
     font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
+    min-width:100%; /* ✅ FIX SAFARI 15 PRO MAX */
 }
 
 /* ✅ HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
@@ -42,7 +43,7 @@ html, body{
 
 /* CARD */
 .card{
-    width:80%;
+    width:calc(100% - 64px); /* ✅ FIX THU NHỎ TRÊN 15 PRO MAX */
     max-width:320px;
     margin:0 auto;
     background:#fff;
@@ -87,6 +88,7 @@ html, body{
 .qr{
     margin:6px auto;
     width:230px;
+    max-width:100%; /* ✅ CHỐNG SAFARI SCALE ẢNH */
     position:relative;
 }
 .qr img{
