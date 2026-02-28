@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ✅ ICON APP iOS (FIX LỖI HIỆN CHỮ Q) -->
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- ✅ CHẶN ZOOM iPHONE -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
@@ -17,22 +15,31 @@
 <title>QR Access</title>
 
 <style>
-body{
+
+/* ================== GLOBAL FIX ================== */
+*{
+    box-sizing:border-box;
+}
+
+html,body{
     margin:0;
+    padding:0;
+    max-width:100%;
+    overflow-x:hidden;
+    touch-action:manipulation;
+    overscroll-behavior:none;
+    -webkit-text-size-adjust:100%;
+}
+
+/* ================== BODY ================== */
+body{
     background:#2f3347;
     font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
 }
 
-/* ✅ HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
-html, body{
-    touch-action: manipulation;
-    overscroll-behavior: none;
-    -webkit-text-size-adjust: 100%;
-}
-
-/* TÊN */
+/* ================== NAME ================== */
 .name{
     margin:24px 0 14px;
     font-size:21px;
@@ -40,9 +47,9 @@ html, body{
     color:#f0d58c;
 }
 
-/* CARD */
+/* ================== CARD ================== */
 .card{
-    width:80%;
+    width:92%;
     max-width:320px;
     margin:0 auto;
     background:#fff;
@@ -52,7 +59,7 @@ html, body{
     overflow:hidden;
 }
 
-/* HEADER */
+/* ================== HEADER ================== */
 .card-header{
     position:relative;
     background:#ffb703;
@@ -61,7 +68,6 @@ html, body{
     font-size:14px;
 }
 
-/* KHUYẾT */
 .card-header::before,
 .card-header::after{
     content:"";
@@ -75,26 +81,30 @@ html, body{
 .card-header::before{ left:-7px; }
 .card-header::after{ right:-7px; }
 
-/* DATE */
+/* ================== DATETIME ================== */
 .datetime{
     margin:24px 0 14px;
     font-size:20px;
     font-weight:bold;
-    white-space:nowrap;
+    white-space:normal;
+    word-break:break-word;
 }
 
-/* QR */
+/* ================== QR ================== */
 .qr{
     margin:6px auto;
-    width:230px;
+    width:90%;
+    max-width:230px;
     position:relative;
 }
+
 .qr img{
     width:100%;
+    display:block;
     transition:opacity .3s ease;
 }
 
-/* LOADING */
+/* ================== LOADING ================== */
 .qr-loading{
     position:absolute;
     top:50%;
@@ -108,18 +118,19 @@ html, body{
     animation:spin .8s linear infinite;
     display:none;
 }
+
 @keyframes spin{
     to{transform:rotate(360deg);}
 }
 
-/* REFRESH */
+/* ================== REFRESH ================== */
 .refresh{
     margin-top:10px;
     color:#888;
     font-size:14px;
 }
 
-/* TIMER */
+/* ================== TIMER ================== */
 .timer{
     margin-top:8px;
     font-size:24px;
@@ -127,7 +138,7 @@ html, body{
     color:#2ecc71;
 }
 
-/* NOTE */
+/* ================== NOTE ================== */
 .note{
     margin:24px auto;
     max-width:300px;
@@ -136,9 +147,11 @@ html, body{
     line-height:1.85;
     text-align:left;
 }
+
 .note .line{
     display:block;
 }
+
 </style>
 </head>
 
@@ -174,7 +187,8 @@ Nguyễn Văn Tuấn ( V25093694)
 </div>
 
 <script>
-// DATE TIME
+
+// ================= DATE TIME =================
 function updateDateTime(){
     const n=new Date();
     document.getElementById("datetime").innerText=
@@ -188,8 +202,9 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER
+// ================= TIMER =================
 let seconds=0;
+
 setInterval(()=>{
     seconds++;
     renderTimer();
@@ -202,15 +217,17 @@ function renderTimer(){
         String(seconds%60).padStart(2,"0");
 }
 
-// CLICK 3 LẦN
+// ================= CLICK 3 TIMES =================
 let clickCount=0;
 let step=0;
+
 const steps=[
     2*3600+30*60,
     5*3600,
     8*3600,
     0
 ];
+
 document.querySelector(".name").onclick=()=>{
     clickCount++;
     if(clickCount===3){
@@ -221,7 +238,7 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
-// QR LOAD
+// ================= QR REFRESH =================
 function refreshQR(){
     const img=document.getElementById("qrImage");
     const loading=document.getElementById("qrLoading");
@@ -236,7 +253,7 @@ function refreshQR(){
     },600);
 }
 
-/* ✅ CHẶN PINCH ZOOM & DOUBLE TAP (iPhone) */
+// ================= BLOCK ZOOM =================
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
@@ -251,6 +268,7 @@ document.addEventListener('touchend', function(e){
     }
     lastTouchEnd=now;
 }, false);
+
 </script>
 
 </body>
