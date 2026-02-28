@@ -3,8 +3,16 @@
 <head>
 <meta charset="UTF-8">
 
+<!-- ICON -->
 <link rel="apple-touch-icon" href="icon.png">
 
+<!-- FULL SCREEN MODE -->
+<meta name="theme-color" content="#2f3347">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- VIEWPORT -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
@@ -16,10 +24,8 @@
 
 <style>
 
-/* ================== GLOBAL FIX ================== */
-*{
-    box-sizing:border-box;
-}
+/* GLOBAL FIX */
+*{ box-sizing:border-box; }
 
 html,body{
     margin:0;
@@ -31,7 +37,6 @@ html,body{
     -webkit-text-size-adjust:100%;
 }
 
-/* ================== BODY ================== */
 body{
     background:#2f3347;
     font-family:Arial,sans-serif;
@@ -39,7 +44,7 @@ body{
     color:#fff;
 }
 
-/* ================== NAME ================== */
+/* NAME */
 .name{
     margin:24px 0 14px;
     font-size:21px;
@@ -47,7 +52,7 @@ body{
     color:#f0d58c;
 }
 
-/* ================== CARD ================== */
+/* CARD */
 .card{
     width:92%;
     max-width:320px;
@@ -59,7 +64,7 @@ body{
     overflow:hidden;
 }
 
-/* ================== HEADER ================== */
+/* HEADER */
 .card-header{
     position:relative;
     background:#ffb703;
@@ -81,7 +86,7 @@ body{
 .card-header::before{ left:-7px; }
 .card-header::after{ right:-7px; }
 
-/* ================== DATETIME ================== */
+/* DATETIME */
 .datetime{
     margin:24px 0 14px;
     font-size:20px;
@@ -90,7 +95,7 @@ body{
     word-break:break-word;
 }
 
-/* ================== QR ================== */
+/* QR */
 .qr{
     margin:6px auto;
     width:90%;
@@ -104,7 +109,7 @@ body{
     transition:opacity .3s ease;
 }
 
-/* ================== LOADING ================== */
+/* LOADING */
 .qr-loading{
     position:absolute;
     top:50%;
@@ -123,14 +128,14 @@ body{
     to{transform:rotate(360deg);}
 }
 
-/* ================== REFRESH ================== */
+/* REFRESH */
 .refresh{
     margin-top:10px;
     color:#888;
     font-size:14px;
 }
 
-/* ================== TIMER ================== */
+/* TIMER */
 .timer{
     margin-top:8px;
     font-size:24px;
@@ -138,7 +143,7 @@ body{
     color:#2ecc71;
 }
 
-/* ================== NOTE ================== */
+/* NOTE */
 .note{
     margin:24px auto;
     max-width:300px;
@@ -147,10 +152,7 @@ body{
     line-height:1.85;
     text-align:left;
 }
-
-.note .line{
-    display:block;
-}
+.note .line{ display:block; }
 
 </style>
 </head>
@@ -188,7 +190,14 @@ Nguyễn Văn Tuấn ( V25093694)
 
 <script>
 
-// ================= DATE TIME =================
+/* ẨN THANH URL MOBILE */
+window.addEventListener("load", function(){
+    setTimeout(function(){
+        window.scrollTo(0,1);
+    }, 100);
+});
+
+// DATE TIME
 function updateDateTime(){
     const n=new Date();
     document.getElementById("datetime").innerText=
@@ -202,9 +211,8 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// ================= TIMER =================
+// TIMER
 let seconds=0;
-
 setInterval(()=>{
     seconds++;
     renderTimer();
@@ -217,16 +225,10 @@ function renderTimer(){
         String(seconds%60).padStart(2,"0");
 }
 
-// ================= CLICK 3 TIMES =================
+// CLICK 3 TIMES
 let clickCount=0;
 let step=0;
-
-const steps=[
-    2*3600+30*60,
-    5*3600,
-    8*3600,
-    0
-];
+const steps=[2*3600+30*60,5*3600,8*3600,0];
 
 document.querySelector(".name").onclick=()=>{
     clickCount++;
@@ -238,7 +240,7 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
-// ================= QR REFRESH =================
+// REFRESH QR
 function refreshQR(){
     const img=document.getElementById("qrImage");
     const loading=document.getElementById("qrLoading");
@@ -253,7 +255,7 @@ function refreshQR(){
     },600);
 }
 
-// ================= BLOCK ZOOM =================
+// BLOCK ZOOM
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
@@ -273,8 +275,3 @@ document.addEventListener('touchend', function(e){
 
 </body>
 </html>
-window.addEventListener("load", function(){
-    setTimeout(function(){
-        window.scrollTo(0,1);
-    }, 100);
-});
