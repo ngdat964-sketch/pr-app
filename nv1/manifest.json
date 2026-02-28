@@ -1,10 +1,12 @@
 {
   "name": "QR Access",
   "short_name": "QR Access",
-  "start_url": ".",
+  "start_url": "/pr-app/nv1/",
+  "scope": "/pr-app/nv1/",
   "display": "standalone",
   "background_color": "#2f3347",
   "theme_color": "#2f3347",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "icon.png",
