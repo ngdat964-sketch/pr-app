@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ICON -->
+<!-- PWA -->
+<link rel="manifest" href="./manifest.json">
 <link rel="apple-touch-icon" href="icon.png">
-
-<!-- FULL SCREEN MODE -->
 <meta name="theme-color" content="#2f3347">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="mobile-web-app-capable" content="yes">
 
 <!-- VIEWPORT -->
 <meta name="viewport"
@@ -190,14 +189,7 @@ Nguyễn Văn Tuấn ( V25093694)
 
 <script>
 
-/* ẨN THANH URL MOBILE */
-window.addEventListener("load", function(){
-    setTimeout(function(){
-        window.scrollTo(0,1);
-    }, 100);
-});
-
-// DATE TIME
+/* DATE TIME */
 function updateDateTime(){
     const n=new Date();
     document.getElementById("datetime").innerText=
@@ -211,7 +203,7 @@ function updateDateTime(){
 setInterval(updateDateTime,1000);
 updateDateTime();
 
-// TIMER
+/* TIMER */
 let seconds=0;
 setInterval(()=>{
     seconds++;
@@ -225,7 +217,7 @@ function renderTimer(){
         String(seconds%60).padStart(2,"0");
 }
 
-// CLICK 3 TIMES
+/* CLICK 3 TIMES */
 let clickCount=0;
 let step=0;
 const steps=[2*3600+30*60,5*3600,8*3600,0];
@@ -240,7 +232,7 @@ document.querySelector(".name").onclick=()=>{
     }
 };
 
-// REFRESH QR
+/* REFRESH QR */
 function refreshQR(){
     const img=document.getElementById("qrImage");
     const loading=document.getElementById("qrLoading");
@@ -255,7 +247,7 @@ function refreshQR(){
     },600);
 }
 
-// BLOCK ZOOM
+/* BLOCK ZOOM */
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
