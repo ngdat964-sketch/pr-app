@@ -5,19 +5,15 @@
 
 <!-- PWA -->
 <link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="icon.png">
 <meta name="theme-color" content="#2f3347">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 <!-- VIEWPORT -->
 <meta name="viewport"
       content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no,
-               viewport-fit=cover">
+               initial-scale=1,
+               maximum-scale=1,
+               user-scalable=no">
 
 <title>QR Access</title>
 
@@ -29,15 +25,18 @@
 html,body{
     margin:0;
     padding:0;
-    max-width:100%;
-    overflow-x:hidden;
-    touch-action:manipulation;
-    overscroll-behavior:none;
-    -webkit-text-size-adjust:100%;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#2f3347;
 }
 
 body{
-    background:#2f3347;
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
     font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
@@ -159,7 +158,7 @@ body{
 <body>
 
 <div class="name">
-Cao Van Bo ( V23040187)
+Cao Van Bo ( V23010187)
 </div>
 
 <div class="card">
@@ -262,6 +261,11 @@ document.addEventListener('touchend', function(e){
     }
     lastTouchEnd=now;
 }, false);
+
+/* REGISTER SERVICE WORKER (PWA) */
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js");
+}
 
 </script>
 
