@@ -3,10 +3,15 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ✅ ICON APP iOS (FIX LỖI HIỆN CHỮ Q) -->
+<!-- ICON APP iOS -->
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- ✅ CHẶN ZOOM iPHONE -->
+<!-- CHẠY FULLSCREEN IOS -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="QR Access">
+
+<!-- CHẶN ZOOM iPHONE -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1.0,
@@ -25,7 +30,7 @@ body{
     color:#fff;
 }
 
-/* ✅ HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
+/* HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
 html, body{
     touch-action: manipulation;
     overscroll-behavior: none;
@@ -108,6 +113,7 @@ html, body{
     animation:spin .8s linear infinite;
     display:none;
 }
+
 @keyframes spin{
     to{transform:rotate(360deg);}
 }
@@ -145,35 +151,36 @@ html, body{
 <body>
 
 <div class="name">
-Lương T Mỹ Hòa (V25092261)
+Lương T.Mỹ Hòa (V25082059)
 </div>
 
 <div class="card">
 
-    <div class="card-header">
-        将二维码对准扫描器刷新出场
-    </div>
+<div class="card-header">
+将二维码对准扫描器刷新出场
+</div>
 
-    <div class="datetime" id="datetime"></div>
+<div class="datetime" id="datetime"></div>
 
-    <div class="qr">
-        <img id="qrImage" src="qr.png">
-        <div class="qr-loading" id="qrLoading"></div>
-    </div>
+<div class="qr">
+<img id="qrImage" src="qr.png">
+<div class="qr-loading" id="qrLoading"></div>
+</div>
 
-    <div class="refresh" onclick="refreshQR()">刷新二维码</div>
+<div class="refresh" onclick="refreshQR()">刷新二维码</div>
 
-    <div class="timer" id="timer">00:00:00</div>
+<div class="timer" id="timer">00:00:00</div>
 
 </div>
 
 <div class="note">
-    <span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
-    <span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
-    <span class="line">感谢您的配合。</span>
+<span class="line">尊敬的员工您好，您已进入企业涉密区域，</span>
+<span class="line">出于企业安全考虑，您的手机摄像头将被禁止，</span>
+<span class="line">感谢您的配合。</span>
 </div>
 
 <script>
+
 // DATE TIME
 function updateDateTime(){
     const n=new Date();
@@ -190,6 +197,7 @@ updateDateTime();
 
 // TIMER
 let seconds=0;
+
 setInterval(()=>{
     seconds++;
     renderTimer();
@@ -205,17 +213,21 @@ function renderTimer(){
 // CLICK 3 LẦN
 let clickCount=0;
 let step=0;
+
 const steps=[
     2*3600+30*60,
     5*3600,
     8*3600,
     0
 ];
+
 document.querySelector(".name").onclick=()=>{
     clickCount++;
+
     if(clickCount===3){
         seconds=steps[step];
         renderTimer();
+
         step=(step+1)%steps.length;
         clickCount=0;
     }
@@ -223,6 +235,7 @@ document.querySelector(".name").onclick=()=>{
 
 // QR LOAD
 function refreshQR(){
+
     const img=document.getElementById("qrImage");
     const loading=document.getElementById("qrLoading");
 
@@ -230,13 +243,16 @@ function refreshQR(){
     loading.style.display="block";
 
     setTimeout(()=>{
+
         img.src="qr.png?t="+Date.now();
         img.style.opacity="1";
         loading.style.display="none";
+
     },600);
 }
 
-/* ✅ CHẶN PINCH ZOOM & DOUBLE TAP (iPhone) */
+/* CHẶN PINCH ZOOM iPHONE */
+
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
@@ -244,13 +260,19 @@ document.addEventListener('touchmove', function(e){
 }, { passive:false });
 
 let lastTouchEnd=0;
+
 document.addEventListener('touchend', function(e){
+
     const now=Date.now();
+
     if(now-lastTouchEnd<=300){
         e.preventDefault();
     }
+
     lastTouchEnd=now;
+
 }, false);
+
 </script>
 
 </body>
