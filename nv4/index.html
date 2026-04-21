@@ -3,15 +3,12 @@
 <head>
 <meta charset="UTF-8">
 
-<!-- ICON APP iOS -->
 <link rel="apple-touch-icon" href="icon.png">
 
-<!-- CHẠY FULLSCREEN IOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QR Access">
 
-<!-- VIEWPORT CHUẨN -->
 <meta name="viewport"
       content="width=device-width,
                initial-scale=1,
@@ -23,14 +20,14 @@
 
 <style>
 
-/* FIX iPhone full màn */
+/* FIX iPhone */
 html, body{
     height:100%;
     margin:0;
     -webkit-text-size-adjust: 100%;
 }
 
-/* BODY CĂN GIỮA + SAFE AREA */
+/* BODY */
 body{
     background:#2f3347;
     font-family:Arial,sans-serif;
@@ -47,7 +44,7 @@ body{
     padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* CHẶN DOUBLE TAP */
+/* CHẶN TOUCH */
 html, body{
     touch-action: manipulation;
     overscroll-behavior: none;
@@ -100,12 +97,19 @@ html, body{
 .card-header::before{ left:-7px; }
 .card-header::after{ right:-7px; }
 
-/* DATE */
+/* ✅ FIX LỆCH THỜI GIAN */
 .datetime{
     margin:24px 0 14px;
     font-size:20px;
     font-weight:bold;
-    white-space:nowrap;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    width:100%;
+
+    font-variant-numeric: tabular-nums;
 }
 
 /* QR */
@@ -264,16 +268,13 @@ function refreshQR(){
     loading.style.display="block";
 
     setTimeout(()=>{
-
         img.src="qr.png?t="+Date.now();
         img.style.opacity="1";
         loading.style.display="none";
-
     },600);
 }
 
-/* CHẶN PINCH ZOOM iPHONE */
-
+/* CHẶN ZOOM iPHONE */
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
@@ -281,17 +282,12 @@ document.addEventListener('touchmove', function(e){
 }, { passive:false });
 
 let lastTouchEnd=0;
-
 document.addEventListener('touchend', function(e){
-
     const now=Date.now();
-
     if(now-lastTouchEnd<=300){
         e.preventDefault();
     }
-
     lastTouchEnd=now;
-
 }, false);
 
 </script>
