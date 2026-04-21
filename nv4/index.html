@@ -11,30 +11,50 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="QR Access">
 
-<!-- CHẶN ZOOM iPHONE -->
+<!-- VIEWPORT CHUẨN -->
 <meta name="viewport"
       content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
+               initial-scale=1,
+               maximum-scale=1,
                user-scalable=no,
                viewport-fit=cover">
 
 <title>QR Access</title>
 
 <style>
-body{
+
+/* FIX iPhone full màn */
+html, body{
+    height:100%;
     margin:0;
-    background:#2f3347;
-    font-family:Arial,sans-serif;
-    text-align:center;
-    color:#fff;
+    -webkit-text-size-adjust: 100%;
 }
 
-/* HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
+/* BODY CĂN GIỮA + SAFE AREA */
+body{
+    background:#2f3347;
+    font-family:Arial,sans-serif;
+    color:#fff;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+
+    min-height:100vh;
+
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* CHẶN DOUBLE TAP */
 html, body{
     touch-action: manipulation;
     overscroll-behavior: none;
-    -webkit-text-size-adjust: 100%;
+}
+
+*{
+    -webkit-tap-highlight-color: transparent;
 }
 
 /* TÊN */
@@ -145,6 +165,7 @@ html, body{
 .note .line{
     display:block;
 }
+
 </style>
 </head>
 
