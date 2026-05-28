@@ -1,19 +1,23 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 
-<!-- ✅ ICON APP iOS (FIX LỖI HIỆN CHỮ Q) -->
-<link rel="apple-touch-icon" href="icon.png">
-
-<!-- ✅ CHẶN ZOOM iPHONE -->
+<!-- iPhone Fullscreen -->
 <meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no,
-               viewport-fit=cover">
+content="width=device-width,
+initial-scale=1.0,
+maximum-scale=1.0,
+user-scalable=no,
+viewport-fit=cover">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#2f3347">
+
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="manifest" href="manifest.json">
 
 <title>QR Access</title>
 
@@ -24,9 +28,11 @@ body{
     font-family:Arial,sans-serif;
     text-align:center;
     color:#fff;
+    min-height:100vh;
+    overflow:hidden;
 }
 
-/* ✅ HẠN CHẾ DOUBLE TAP / TEXT ZOOM */
+/* CHẶN ZOOM */
 html, body{
     touch-action: manipulation;
     overscroll-behavior: none;
@@ -237,7 +243,7 @@ function refreshQR(){
     },600);
 }
 
-/* ✅ CHẶN PINCH ZOOM & DOUBLE TAP (iPhone) */
+// CHẶN PINCH ZOOM & DOUBLE TAP
 document.addEventListener('touchmove', function(e){
     if(e.scale && e.scale !== 1){
         e.preventDefault();
@@ -252,6 +258,13 @@ document.addEventListener('touchend', function(e){
     }
     lastTouchEnd=now;
 }, false);
+
+// ẨN THANH URL iPHONE
+window.addEventListener("load",()=>{
+    setTimeout(()=>{
+        window.scrollTo(0,1);
+    },100);
+});
 </script>
 
 </body>
